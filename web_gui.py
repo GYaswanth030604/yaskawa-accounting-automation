@@ -35,7 +35,7 @@ from main import (
 )
 
 PORT = int(os.environ.get("PORT", 8765))
-HOST = "0.0.0.0" if os.environ.get("PORT") or os.environ.get("RENDER") else "127.0.0.1"
+HOST = "0.0.0.0" if (os.environ.get("PORT") or os.environ.get("RENDER") or os.environ.get("CODESPACES")) else "127.0.0.1"
 WORKSPACE_ROOT = Path(__file__).resolve().parent
 
 # Global execution state
