@@ -3,6 +3,7 @@ YASKAWA Import Accounting Automation - Comprehensive Web GUI Server
 Zero-dependency, offline desktop interface running on localhost.
 Allows uploading all shipment documents (Commercial Invoices, Bills of Entry,
 Delivery Notes, Packing Lists, Air Waybills, Masters, and Supporting Files),
+viewing and inline-editing the 7-Column Product Master (master.xlsx),
 running the accounting pipeline, inspecting live audit checks, and downloading workbooks.
 """
 
@@ -19,6 +20,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs, unquote
+import openpyxl
 
 # Import main pipeline
 from main import (
@@ -35,7 +37,7 @@ from main import (
 )
 
 PORT = int(os.environ.get("PORT", 8765))
-HOST = "0.0.0.0" if (os.environ.get("PORT") or os.environ.get("RENDER") or os.environ.get("CODESPACES")) else "127.0.0.1"
+HOST = "0.0.0.0" if os.environ.get("PORT") or os.environ.get("RENDER") else "127.0.0.1"
 WORKSPACE_ROOT = Path(__file__).resolve().parent
 
 # Global execution state
@@ -132,7 +134,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       line-height: 1.5;
       padding: 24px;
     }
-    .container { max-width: 1120px; margin: 0 auto; }
+    .container { max-width: 1180px; margin: 0 auto; }
     .header {
       background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #4f46e5 100%);
       padding: 26px 30px;
@@ -183,7 +185,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     .universal-dropzone {
       border: 2px dashed #3b82f6;
       border-radius: 12px;
-      padding: 28px 20px;
+      padding: 24px 20px;
       text-align: center;
       transition: all 0.2s ease;
       cursor: pointer;
@@ -203,30 +205,33 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       cursor: pointer;
     }
     .dz-icon {
-      width: 44px; height: 44px; margin: 0 auto 10px;
+      width: 40px; height: 40px; margin: 0 auto 8px;
       background: rgba(37, 99, 235, 0.2);
-      border-radius: 12px;
+      border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
       color: #60a5fa;
     }
-    .dz-title { font-size: 15px; font-weight: 600; color: #fff; }
+    .dz-title { font-size: 14px; font-weight: 600; color: #fff; }
     .dz-desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
     
-    /* File Table */
+    /* Tables */
     .table-container {
       overflow-x: auto;
       border-radius: 10px;
       border: 1px solid var(--border);
+      max-height: 440px;
+      overflow-y: auto;
     }
     table { width: 100%; border-collapse: collapse; font-size: 12px; }
     th {
-      text-align: left; padding: 10px 14px;
+      text-align: left; padding: 10px 12px;
       background: var(--card-sub);
       color: var(--muted);
       border-bottom: 1px solid var(--border);
       font-weight: 600;
+      position: sticky; top: 0; z-index: 2;
     }
-    td { padding: 10px 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); font-family: monospace; }
+    td { padding: 8px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); font-family: monospace; }
     tr:hover td { background: rgba(255, 255, 255, 0.02); }
     
     /* Badges */
@@ -243,7 +248,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
-      gap: 8px; padding: 10px 18px; border-radius: 8px;
+      gap: 8px; padding: 9px 16px; border-radius: 8px;
       font-size: 12px; font-weight: 600; cursor: pointer;
       border: none; transition: all 0.15s ease; text-decoration: none;
     }
@@ -259,6 +264,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       color: var(--text);
     }
     .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
+    .btn-purple {
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      color: #c084fc;
+    }
+    .btn-purple:hover { background: rgba(139, 92, 246, 0.3); color: #fff; }
     .btn-danger {
       background: rgba(239, 68, 68, 0.15);
       border: 1px solid rgba(239, 68, 68, 0.3);
@@ -279,12 +290,33 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       background: #060911; border: 1px solid var(--border);
       border-radius: 10px; padding: 14px;
       font-family: "Consolas", "Courier New", monospace;
-      font-size: 12px; color: #cbd5e1; height: 230px;
+      font-size: 12px; color: #cbd5e1; height: 210px;
       overflow-y: auto; white-space: pre-wrap;
     }
     .status-pass { color: var(--success); font-weight: bold; background: rgba(16, 185, 129, 0.1); padding: 2px 8px; border-radius: 4px; }
     .status-warning { color: var(--warning); font-weight: bold; background: rgba(245, 158, 11, 0.1); padding: 2px 8px; border-radius: 4px; }
     .status-fail { color: var(--danger); font-weight: bold; background: rgba(239, 68, 68, 0.1); padding: 2px 8px; border-radius: 4px; }
+
+    /* Editable Input in Table */
+    .cell-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: monospace;
+    }
+    .cell-input:focus { outline: none; border-color: #3b82f6; background: rgba(0, 0, 0, 0.5); }
+    .cell-select {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
@@ -293,19 +325,19 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       <div>
         <div class="badge">● 100% Offline Shipment Hub</div>
         <h1>YASKAWA Import Accounting & Automation</h1>
-        <p>Incorporate all shipment files: Commercial Invoices, Bill of Entry, Delivery Notes, Packing Lists & Masters.</p>
+        <p>Incorporate all shipment files: Commercial Invoices, Bill of Entry, Delivery Notes, and Editable Product Master.</p>
       </div>
       <div style="text-align: right;">
-        <span style="font-size: 12px; color: #bfdbfe;">Active BoE Rate</span>
-        <div style="font-size: 20px; font-weight: bold; font-family: monospace;">1 EUR = 110.50 INR</div>
-        <span style="font-size: 11px; color: #6ee7b7;">SWS 10.0% • Deterministic Decimal Math</span>
+        <span style="font-size: 12px; color: #bfdbfe;">Exchange Rate Support</span>
+        <div style="font-size: 20px; font-weight: bold; font-family: monospace;">Universal ICEGATE BoE</div>
+        <span style="font-size: 11px; color: #6ee7b7;">Dynamic Duty Allocations • Zero Float Drift</span>
       </div>
     </div>
 
-    <!-- Multi-File Document Ingestion Card -->
+    <!-- Section 1: Multi-File Ingestion -->
     <div class="card">
       <div class="card-title">
-        <span>1. Shipment Document Manager (Add Any File)</span>
+        <span>1. Shipment Document Manager</span>
         <button class="btn btn-secondary" onclick="openExplorer('input')" style="padding: 5px 12px; font-size: 11px;">
           Open input/ in Explorer
         </button>
@@ -315,14 +347,14 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       <div class="universal-dropzone" id="universal-dz">
         <input type="file" id="multi-file-input" multiple onchange="uploadMultipleFiles(this)">
         <div class="dz-icon">
-          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
         </div>
         <div class="dz-title">Drag & Drop Any Files Here or Click to Browse</div>
-        <div class="dz-desc">Supports multiple files: Commercial Invoice, Bill of Entry, Delivery Note(s), Packing List, Air Waybill, Master Excel (.pdf, .xlsx, .xls, .csv)</div>
+        <div class="dz-desc">Commercial Invoice (*.pdf), Bill of Entry (*.pdf), Delivery Notes, Base Template & Master (*.xlsx)</div>
       </div>
 
       <!-- Live File Inventory Table -->
-      <div class="table-container">
+      <div class="table-container" style="max-height: 220px;">
         <table>
           <thead>
             <tr>
@@ -334,15 +366,61 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             </tr>
           </thead>
           <tbody id="files-tbody">
-            <tr><td colspan="5" style="text-align: center; color: var(--muted); padding: 16px;">Loading files from input/ folder...</td></tr>
+            <tr><td colspan="5" style="text-align: center; color: var(--muted); padding: 14px;">Loading files from input/ folder...</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- Parameter Options -->
+    <!-- Section 2: Editable Product Master -->
+    <div class="card">
+      <div class="card-title">
+        <span>2. Product Master Database (master.xlsx - Editable)</span>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" onclick="openMasterExcel()" style="padding: 5px 12px; font-size: 11px;">
+            Open in Excel
+          </button>
+          <button class="btn btn-purple" onclick="mergeReviewedMaster()" style="padding: 5px 12px; font-size: 11px;">
+            Import New Parts from Review
+          </button>
+          <button class="btn btn-secondary" onclick="addNewMasterRow()" style="padding: 5px 12px; font-size: 11px;">
+            + Add Part
+          </button>
+          <button class="btn btn-success" onclick="saveMasterData()" id="btn-save-master" style="padding: 5px 14px; font-size: 11px;">
+            Save to master.xlsx
+          </button>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <input type="text" id="master-search" oninput="filterMasterTable()" placeholder="Search Part No, Description, or Tally Name..." style="width: 320px; padding: 7px 12px; background: #0a0f1d; border: 1px solid var(--border); border-radius: 8px; color: #fff; font-size: 12px;">
+        <span id="master-count" style="font-size: 11px; color: var(--muted); font-mono;">Loading items...</span>
+      </div>
+
+      <div class="table-container" style="max-height: 380px;">
+        <table id="master-table">
+          <thead>
+            <tr>
+              <th style="width: 140px;">Part No</th>
+              <th style="width: 260px;">Tally Item Name</th>
+              <th>Description</th>
+              <th style="width: 110px;">HS Code</th>
+              <th style="width: 80px;">BCD %</th>
+              <th style="width: 130px;">Batch Type</th>
+              <th style="width: 160px;">Notes</th>
+              <th style="text-align: center; width: 60px;">Del</th>
+            </tr>
+          </thead>
+          <tbody id="master-tbody">
+            <tr><td colspan="8" style="text-align: center; color: var(--muted); padding: 16px;">Loading Product Master...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 3: Processing Options & Execution -->
     <div class="card" style="padding: 16px 20px;">
-      <div class="card-title">2. Processing Options</div>
+      <div class="card-title">3. Processing Options</div>
       <div style="display: flex; gap: 24px; flex-wrap: wrap; font-size: 12px;">
         <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
           <input type="checkbox" id="chk-batch" style="accent-color: #2563eb;">
@@ -353,7 +431,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           <span>Generate Highlighted Audit Copy (_REVIEW.xlsx)</span>
         </label>
         <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-          <input type="checkbox" id="chk-stop" checked style="accent-color: #2563eb;">
+          <input type="checkbox" id="chk-stop" style="accent-color: #2563eb;">
           <span>Stop if Master fields are uncataloged</span>
         </label>
       </div>
@@ -384,7 +462,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
       <!-- Generated Workbooks -->
       <div class="card" style="margin-bottom: 0;">
-        <div class="card-title">Generated Workbooks</div>
+        <div class="card-title">Generated Workbooks (16-Column Purchase Format)</div>
         <div style="display: flex; flex-direction: column; gap: 10px;">
           <a class="btn btn-success" id="link-clean" href="/download/YASKAWA_NEW_SHIPMENT.xlsx" style="justify-content: space-between;">
             <span>Clean Tally Excel (Import-Ready)</span>
@@ -429,14 +507,16 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <script>
     let isRunning = false;
     let pollInterval = null;
+    let masterRows = [];
 
+    // --- File Inventory ---
     async function loadFiles() {
       try {
         const res = await fetch('/api/files');
         const files = await res.json();
         const tbody = document.getElementById('files-tbody');
         if (!files || files.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--muted); padding: 16px;">No files currently in input/ folder. Drag and drop files above to add them.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--muted); padding: 14px;">No files currently in input/ folder. Drag and drop files above to add them.</td></tr>';
           return;
         }
 
@@ -503,6 +583,117 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       }
     }
 
+    // --- Master Excel Management (Editable) ---
+    async function loadMasterData() {
+      try {
+        const res = await fetch('/api/master');
+        masterRows = await res.json();
+        renderMasterTable(masterRows);
+      } catch (e) {
+        console.error("Failed to load master", e);
+      }
+    }
+
+    function renderMasterTable(rows) {
+      const tbody = document.getElementById('master-tbody');
+      tbody.innerHTML = '';
+      document.getElementById('master-count').textContent = `${rows.length} Items Configured`;
+
+      rows.forEach((it, idx) => {
+        const tr = document.createElement('tr');
+        tr.dataset.index = idx;
+        tr.innerHTML = `
+          <td><input class="cell-input" value="${it.part_no || ''}" onchange="updateMasterCell(${idx}, 'part_no', this.value)"></td>
+          <td><input class="cell-input" value="${it.tally_name || ''}" onchange="updateMasterCell(${idx}, 'tally_name', this.value)"></td>
+          <td><input class="cell-input" value="${it.description || ''}" onchange="updateMasterCell(${idx}, 'description', this.value)"></td>
+          <td><input class="cell-input" value="${it.hs_code || ''}" onchange="updateMasterCell(${idx}, 'hs_code', this.value)"></td>
+          <td><input class="cell-input" value="${it.bcd_rate || ''}" onchange="updateMasterCell(${idx}, 'bcd_rate', this.value)"></td>
+          <td>
+            <select class="cell-select" onchange="updateMasterCell(${idx}, 'batch_type', this.value)">
+              <option value="Batch No" ${it.batch_type === 'Batch No' ? 'selected' : ''}>Batch No</option>
+              <option value="Primary Batch" ${it.batch_type === 'Primary Batch' ? 'selected' : ''}>Primary Batch</option>
+            </select>
+          </td>
+          <td><input class="cell-input" value="${it.notes || ''}" onchange="updateMasterCell(${idx}, 'notes', this.value)"></td>
+          <td style="text-align: center;">
+            <button class="btn btn-danger" onclick="deleteMasterRow(${idx})" style="padding: 2px 6px;">✕</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateMasterCell(idx, field, val) {
+      if (masterRows[idx]) {
+        masterRows[idx][field] = val;
+      }
+    }
+
+    function addNewMasterRow() {
+      masterRows.unshift({
+        part_no: "NEW-PART",
+        tally_name: "",
+        description: "",
+        hs_code: "",
+        bcd_rate: "10.0",
+        batch_type: "Batch No",
+        notes: "Manual Entry"
+      });
+      renderMasterTable(masterRows);
+    }
+
+    function deleteMasterRow(idx) {
+      masterRows.splice(idx, 1);
+      renderMasterTable(masterRows);
+    }
+
+    function filterMasterTable() {
+      const q = document.getElementById('master-search').value.toLowerCase();
+      const filtered = masterRows.filter(r => 
+        (r.part_no && r.part_no.toLowerCase().includes(q)) ||
+        (r.tally_name && r.tally_name.toLowerCase().includes(q)) ||
+        (r.description && r.description.toLowerCase().includes(q))
+      );
+      renderMasterTable(filtered);
+    }
+
+    async function saveMasterData() {
+      const btn = document.getElementById('btn-save-master');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      try {
+        const res = await fetch('/api/master', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(masterRows)
+        });
+        const d = await res.json();
+        alert(`Saved ${d.count} items successfully to input/master.xlsx!`);
+      } catch (e) {
+        alert("Failed to save master: " + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save to master.xlsx';
+      }
+    }
+
+    async function mergeReviewedMaster() {
+      if (!confirm("Import all new uncataloged parts from output/master_reviewed.xlsx into master.xlsx?")) return;
+      try {
+        const res = await fetch('/api/master/merge', { method: 'POST' });
+        const d = await res.json();
+        alert(`Merged ${d.rows} items into master.xlsx!`);
+        loadMasterData();
+      } catch (e) {
+        alert("Merge failed: " + e.message);
+      }
+    }
+
+    function openMasterExcel() {
+      fetch('/api/open_file?file=master');
+    }
+
+    // --- Pipeline Status & Controls ---
     async function updateStatus() {
       try {
         const res = await fetch('/api/status');
@@ -587,9 +778,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
     // Initial load
     loadFiles();
+    loadMasterData();
     updateStatus();
     setInterval(updateStatus, 2500);
-    setInterval(loadFiles, 5000);
+    setInterval(loadFiles, 6000);
   </script>
 </body>
 </html>
@@ -607,12 +799,42 @@ class AutomationHttpServer(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(HTML_TEMPLATE.encode("utf-8"))
 
+        elif path in ("/health", "/healthz"):
+            self.send_response(200)
+            self.send_header("Content-Type", "text/plain")
+            self.end_headers()
+            self.wfile.write(b"OK")
+
         elif path == "/api/files":
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             files_data = get_files_list()
             self.wfile.write(json.dumps(files_data).encode("utf-8"))
+
+        elif path == "/api/master":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            master_file = WORKSPACE_ROOT / INPUT_FOLDER / MASTER_EXCEL
+            rows = []
+            if master_file.exists():
+                wb = openpyxl.load_workbook(master_file, data_only=True)
+                ws = wb.active
+                for r in range(2, ws.max_row + 1):
+                    p_no = str(ws.cell(r, 1).value or "").strip()
+                    if not p_no:
+                        continue
+                    rows.append({
+                        "part_no": p_no,
+                        "tally_name": str(ws.cell(r, 2).value or "").strip(),
+                        "description": str(ws.cell(r, 3).value or "").strip(),
+                        "hs_code": str(ws.cell(r, 4).value or "").strip(),
+                        "bcd_rate": str(ws.cell(r, 5).value or "").strip(),
+                        "batch_type": str(ws.cell(r, 6).value or "Batch No").strip(),
+                        "notes": str(ws.cell(r, 7).value or "").strip()
+                    })
+            self.wfile.write(json.dumps(rows).encode("utf-8"))
 
         elif path == "/api/status":
             self.send_response(200)
@@ -633,6 +855,20 @@ class AutomationHttpServer(BaseHTTPRequestHandler):
             dir_to_open = (WORKSPACE_ROOT / INPUT_FOLDER) if target == "input" else (WORKSPACE_ROOT / OUTPUT_FOLDER)
             try:
                 os.startfile(str(dir_to_open))
+                self.send_response(200)
+                self.end_headers()
+                self.wfile.write(b"OK")
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(str(e).encode())
+
+        elif path == "/api/open_file":
+            qs = parse_qs(parsed.query)
+            target = qs.get("file", ["master"])[0]
+            file_to_open = (WORKSPACE_ROOT / INPUT_FOLDER / MASTER_EXCEL) if target == "master" else (WORKSPACE_ROOT / OUTPUT_FOLDER / OUTPUT_FILENAME)
+            try:
+                os.startfile(str(file_to_open))
                 self.send_response(200)
                 self.end_headers()
                 self.wfile.write(b"OK")
@@ -690,6 +926,60 @@ class AutomationHttpServer(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(json.dumps({"status": "OK", "filename": filename, "bytes": bytes_written}).encode("utf-8"))
+
+        elif path == "/api/master":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length)
+            rows = json.loads(body.decode("utf-8"))
+
+            master_file = WORKSPACE_ROOT / INPUT_FOLDER / MASTER_EXCEL
+            wb = openpyxl.Workbook()
+            ws = wb.active
+            ws.title = "Product Master"
+            headers = ["Part No", "Tally Item Name", "Description", "HS Code", "BCD %", "Batch Type", "Notes"]
+            ws.append(headers)
+
+            for item in rows:
+                p_no = str(item.get("part_no", "")).strip()
+                if not p_no:
+                    continue
+                bcd_val = str(item.get("bcd_rate", "")).strip()
+                try:
+                    bcd_num = float(bcd_val) if bcd_val else None
+                except Exception:
+                    bcd_num = None
+
+                ws.append([
+                    p_no,
+                    str(item.get("tally_name", "")).strip(),
+                    str(item.get("description", "")).strip(),
+                    str(item.get("hs_code", "")).strip(),
+                    bcd_num,
+                    str(item.get("batch_type", "Batch No")).strip(),
+                    str(item.get("notes", "")).strip()
+                ])
+
+            wb.save(master_file)
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps({"status": "SAVED", "count": len(rows)}).encode("utf-8"))
+
+        elif path == "/api/master/merge":
+            rev_file = WORKSPACE_ROOT / OUTPUT_FOLDER / "master_reviewed.xlsx"
+            master_file = WORKSPACE_ROOT / INPUT_FOLDER / MASTER_EXCEL
+            if rev_file.exists():
+                wb_rev = openpyxl.load_workbook(rev_file, data_only=True)
+                ws_rev = wb_rev.active
+                wb_rev.save(master_file)
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "MERGED", "rows": ws_rev.max_row - 1}).encode("utf-8"))
+            else:
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(b"No reviewed master file found.")
 
         elif path == "/api/run":
             if pipeline_state["running"]:
@@ -762,7 +1052,7 @@ def launch_server():
     print(f"\n=======================================================")
     print(f" YASKAWA AUTOMATION WEB HUB READY")
     print(f" Web Interface: {url}")
-    print(f" Supports multi-file ingestion for all shipment files.")
+    print(f" Supports multi-file ingestion & editable Master Excel.")
     print(f"=======================================================\n")
     if HOST == "127.0.0.1":
         webbrowser.open(url)
