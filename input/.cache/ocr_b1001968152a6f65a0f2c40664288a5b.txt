@@ -1,0 +1,295 @@
+=== PAGE 1 ===
+YASKAWA Europe GmbH, Philipp-Reis-StraBe 6,
+VIPA Automation India Pvt Ltd.
+3rd Floor,k B.R. House, Invoice No. 980012283
+iA
+Sales Assistant Katja Fontaine
+Telephone Number +49 (0) 6196 569 489
+E-Mail a
+Currency EUR
+Conditions
+Terms of delivery CIP Bangalore
+Item Material Description Quant. Unit
+With delivery 80300006 from 16.10.2026
+10 100-221-094 955-CO00MO00 - VIPASetCard 001 (VSC) 2 EA
+VIPASetCard 001 for SLIO CPU
++ PROFIBUS master
+101.00 EUR 202.00
+Commodity Code 85235190009
+Order: 264362 - 170 Date: 28.04.2026
+Country of Origin DE
+PO Number: PO/V/705 Date: 28.04.2026
+20 10110130 972-0DP10-A PB DPPlug90° 12MBit,PG-B 2,694 EA
+13.20 EUR 35,560.80
+Commodity Code 85366990990
+Order: 266260 - 10 Date: 28.05.2026
+Country of Origin TH
+PO Number: PO/V/708 Date: 26.05.2026
+30 10110132 972-0DP30-A PB DPPlug0° 12MBit 453 EA
+13.20 EUR 5,979.60
+Commodity Code 85366990990
+Order: 266260 - 30 Date: 28.05.2026
+Country of Origin TH
+PO Number: PO/V/708 Date: 26.05.2026
+40 100-221-094 955-CO000MO00 - VIPASetCard 001 (VSC) 1 EA
+VIPASetCard 001 for SLIO CPU
++ PROFIBUS master
+
+=== PAGE 2 ===
+Document 980012283
+Date 21-Oct-26
+Currency EUR
+Item Material Description Quant. —_ Unit
+101.00 EUR 101.00
+Commodity Code 85235190009
+Order: 267391 -280 Date: 15.06.2026
+Country of Origin DE
+Customer Material: 955-CO00OMOO
+PO Number: PO/V/710 Date: 10.06.2026
+50 100-221-370 015-CEFPRO1 - CPU 015PN 25 EA
+CPU 015PN - SPEED7 Technology
+SPEED7 technology
+256 kB work memory
+Memory extension (max. 512 kB)
+Interface 1: RJ45 Switch: active Ethernet & PG/OP communication
+Interface 2: RS485 (potential separated): MPI, USS master, ASCII, ETX/STX, 3964R,
+Modbus master/slave (switchable)
+Interface 3: RS485 (potential separated), MPI (optional PROFIBUS slave or PROFIBUS
+master)
+Interface 4: RJ45 Switch: PROFINET controller for up to 128 participants
+"Interface 5: RJ45 Switch; active Ethernet & PG/OP communication"
+Interface 6: RJ45 switch: PROFINET controller for up to 128 participants
+SD card slot with interlock
+connection of up to 64 SLIO modules possible
+programmable with SPEED7 Studio, SIMATIC Manager or TIA Portal
+325.00 EUR 8,125.02
+Commodity Code 85371091990
+Order: 267392 -50 Date: 15.06.2026
+Country of Origin DE
+Customer Material: 015PN
+PO Number: PO/V/711 Date: 10.06.2026
+60 100-221-094 955-CO00M00 - VIPASetCard 001 (VSC) 1 EA
+VIPASetCard 001 for SLIO CPU
++ PROFIBUS master
+101.00 EUR 101.00
+Commodity Code 85235190009
+Order: 267392 - 280 Date: 15.06.2026
+Country of Origin DE
+Customer Material: 955-COO0MO00
+PO Number: PO/V/711 Date: 10.06.2026
+70 100-221-380 315-4NE23 - VIPA CPU 315SN 2 EA
+CPU 315SN - SPEED7 Technology
+DC 24V, 1MB work memory
+Memory extension (max. 4MB)
+
+=== PAGE 3 ===
+Document 980012283
+Date 21-Oct-26
+Currency EUR
+Item Material Description Quant. Unit
+MPI, MMC slot, real-time clock\Interface: PROFIBUS DP master, 12Mbit/s up to 124
+slaves/PtP RS485, potential separated, ASCII, STX/E
+TX,3964R,Modbusmaster, USSmaster,EthernetinterfaceforPG/OPcommunication,
+EthernetCP343Lean,S7communication,RFC1006,H1,TCP/IP,UDP,upto8
+connections
+1,167.95 EUR 2,335.90
+Commodity Code 85371091990
+Order: 273754 -140 Date: 23.09.2026
+Country of Origin CZ
+PO Number: PO/V/717 Date: 23.09.2026
+80 100-221-370 015-CEFPRO1 - CPU 015PN 25 EA
+CPU 015PN - SPEED7 Technology
+SPEED7 technology
+256 kB work memory
+Memory extension (max. 512 kB)
+Interface 1: RJ45 Switch: active Ethernet & PG/OP communication
+Interface 2: RS485 (potential separated): MPI, USS master, ASCII, ETX/STX, 3964R,
+Modbus master/slave (switchable)
+Interface 3: RS485 (potential separated), MP! (optional PROFIBUS slave or PROFIBUS
+master)
+Interface 4: RJ45 Switch: PROFINET controller for up to 128 participants
+"Interface 5: RJ45 Switch; active Ethernet & PG/OP communication"
+Interface 6: RJ45 switch: PROFINET controller for up to 128 participants
+SD card slot with interlock
+connection of up to 64 SLIO modules possible
+programmable with SPEED7 Studio, SIMATIC Manager or TIA Portal
+325.00 EUR 8,125.02
+Commodity Code 85371091990
+Order: 267393 -50 Date: 15.06.2026
+Country of Origin DE
+Customer Material: 015-CEFPRO1
+PO Number: PO/V/712 Date: 10.06.2026
+90 100-221-094 955-COO00MO00 - VIPASetCard 001 (VSC) 1 EA
+VIPASetCard 001 for SLIO CPU
++ PROFIBUS master
+101.00 EUR 101.00
+Commodity Code 85235190009
+Order: 267393 - 280 Date: 15.06.2026
+Country of Origin DE
+Customer Material: 955-COOOMOO
+PO Number: PO/V/712 Date: 10.06.2026
+
+=== PAGE 4 ===
+Document 980012283
+Date 21-Oct-26
+Currency EUR
+Item Material Description Quant. Unit
+100 10110620 001-1BA00 CM 001 - Pot. distributor 60 EA
+10.34 EUR 620.40
+Commodity Code 85369010000
+Order: 275316 -10 Date: 15.10.2026
+Country of Origin TH
+Customer Material: 001-1
+PO Number: PO/V/718 Date: 13.10.2026
+110 10110621 001-1BA10 CM 001 - Pot. distributor 70 EA
+10.34 EUR 723.80
+Commodity Code 85369010000
+Order: 275316 -20 Date: 15.10.2026
+Country of Origin TH
+Customer Material: 001-1
+PO Number: PO/V/718 Date: 13.10.2026
+120 100-220-988 007-0AA00 - PM 007 - Power module 5 EA
+PM 007 - Power module
+Power supply DC 24 V
+16.92 EUR 84.60
+Commodity Code 85369010000
+Order: 275316 -30 Date: 15.10.2026
+Country of Origin TH
+Customer Material: 007-OAA00
+PO Number: PO/V/718 Date: 13.10.2026
+130 100-220-786 021-1BD40 - SM 021 - Digital input 1 EA
+SM 021 - Digital input
+4 inputs
+Connect 2/3 wire
+20.68 EUR 20.68
+Commodity Code 85389099990
+Order: 275316 - 40 Date: 15.10.2026
+Country of Origin TH
+Customer Material: 021-1BD40
+PO Number: PO/V/718 Date: 13.10.2026
+140 100-220-823 022-1BB90 - SM 022 - Digital output 2 EA
+SM 022 - Digital output
+2 outputs
+PWM
+74.26 EUR 148.52
+
+=== PAGE 5 ===
+Document 980012283
+Date 21-Oct-26
+Currency EUR
+Item Material Description Quant. —_— Unit
+Commodity Code 85389099990
+Order: 275316 -50 Date: 15.10.2026
+Country of Origin TH
+Customer Material: 022-1
+PO Number: PO/V/718 Date: 13.10.2026
+150 100-220-609 031-1BB90 - SM 031 - Analog input 4 EA
+SM 031 - Analog input
+2 inputs 16Bit
+Thermocouple
+Voltage -80mV+80mV
+80.00 EUR 320.00
+Commodity Code 85389099990
+Order: 275316 -60 Date: 15.10.2026
+Country of Origin TH
+Customer Material: 031-1
+PO Number: PO/V/718 Date: 13.10.2026
+160 100-220-616 031-1BD30 - SM 031 - Analog input 5 EA
+SM 031 - Analog input
+4 inputs 12Bit
+Voltage 010 V
+66.40 EUR 332.00
+Commodity Code 85389099990
+Order: 275316 -70 Date: 15.10.2026
+Country of Origin TH
+Customer Material: 031-1BD30
+PO Number: PO/V/718 Date: 13.10.2026
+170 100-220-631 032-1BB40 - SM 032 - Analog output 10 EA
+SM 032 - Analog output
+2 outputs 12Bit
+Current 0(4)20 mA
+65.60 EUR 656.00
+Commodity Code 85389099990
+Order: 275316 -80 Date: 15.10.2026
+Country of Origin TH
+Customer Material: 032-1
+PO Number: PO/V/718 Date: 13.10.2026
+180 100-220-644 032-1CD70 - SM 032 - Analog output 2 EA
+SM 032 - Analog output
+
+=== PAGE 6 ===
+Document 980012283
+Date 21-Oct-26
+Currency EUR
+Item Material Description Quant. Unit
+4 outputs 16Bit
+Voltage -10 V+10 V 96.35 EUR 192.70
+Commodity Code 85389099990
+Order: 275316 -90 Date: 15.10.2026
+Country of Origin TH
+Customer Material: 032-1
+PO Number: PO/V/718 Date: 13.10.2026
+190 100-220-578 050-1BA00 - FM 050 - Counter module 6 EA
+FM 050 - Counter module
+1 Counter 32 Bit (AB)
+DC 24V
+95.88 EUR 575.28
+Commodity Code 85389099990
+Order: 275316 - 100 Date: 15.10.2026
+Country of Origin TH
+Customer Material: 050-1
+PO Number: PO/V/718 Date: 13.10.2026
+200 100-221-375 314-2AG23 - VIPA CPU 314SB DPM 2 EA
+CPU 314SB_DPM - SPEED7 Technology
+DC 24V, 512kB work memory
+Memory extension (max 1MB)
+MPI, MMC slot, real-time clock
+Interface: PROFIBUS DP master, 12Mbit/s, up to 124 slaves/PtP RS485, potential
+separated, ASCII, STX/ETX, 3964R, Modbus master, USS
+master,EthernetinterfaceforPG/OPcommunication
+462.50 EUR 925.00
+Commodity Code 85371091990
+Order: 275316 -110 Date: 15.10.2026
+Country of Origin CZ
+Customer Material: 314-2AG23
+PO Number: PO/V/718 Date: 13.10.2026
+210 100-220-852 972-0DP10 - EasyConn 90° - PB plug 2,500 EA
+EasyConn PB 90 degree - PROFIBUS plug
+Clock rate up to 12MBit/s ; Metal case ; PG-jack
+switchable terminating resistor ; 90 degree outgoing cable
+Bus diagnosis via LED ; packaging unit: 1 piece
+13.11 EUR 32,775.00
+Commodity Code 85366990990
+Order: 275316 - 130 Date: 15.10.2026
+Batch No 1000528438 2,420 EA
+
+=== PAGE 7 ===
+Document 980012283
+Date 21-Oct-26
+Currency EUR
+Item Material Description : Quant. = Unit
+Country of Origin TH
+Batch No 1000532122 80 EA
+Country of Origin TH
+Country of Origin TH
+Customer Material: 972-ODP10
+PO Number: PO/V/718 Date: 13.10.2026
+220 100-220-848 972-0DP30 - EasyConn 0° - PB plug 200 EA
+EasyConn PB 0 degree - PROFIBUS plug
+Clock rate up to 12MBit/s ; Metal case ; PG-jack
+switchable terminating resistor ; 0 degree outgoing cable
+Bus diagnosis via LED ; packaging unit: 1 piece
+13.11 EUR 2,622.00
+Commodity Code 85366990990
+Order: 275316 - 140 Date: 15.10.2026
+Country of Origin TH
+Customer Material: 972-0DP30
+PO Number: PO/V/718 Date: 13.10.2026
+Total: 1,00,627.32
+Rate Base Value
+VAT 0.00 % 1,00,627.32 0.00
+Total amount: 1,00,627.32
+taxfree export delivery st
+YASKAWA Eurppe GmbH YASKAWA Europe GmbH-
+Value for customs purposes only By S ot os JA id .
+Exchange rate EUR to : 0.00000 = 0.00 Authorized Signature | Authorized Signature

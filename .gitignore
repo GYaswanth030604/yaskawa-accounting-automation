@@ -6,8 +6,8 @@ __pycache__/
 
 # Caches
 .pytest_cache/
-input/.cache/
-.cache/
+/.cache/
+!input/.cache/*.txt
 
 # Local Python & Tesseract binaries (re-installed or downloaded separately)
 py312/

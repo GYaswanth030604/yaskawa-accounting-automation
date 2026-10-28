@@ -1,0 +1,311 @@
+=== PAGE 1 ===
+YASKAWA ees GmbH, Philipp-Reis-Strafe 6,
+air Customs Invoice
+VIPA Automation India Pvt Ltd.
+3rd Floor,k B.R. House, Invoice No. 980012194
+Hennur Main Road
+Date 02.10.2026
+560043 BANGALORE : :
+INDIA
+Sales Assistant Katja Fontaine
+Telephone Number +49 (0) 6196 569 489
+. yeu.ka.
+E-Mail customercare@yaskawa.eu
+Currency EUR
+Conditions
+Terms of delivery CIP Bangalore
+Item Material Description Quant. Unit
+With delivery 80297349 from 08.09.2026
+10 10099384 H71-71A41-0 - smartPanel TP307-SM 1 EA
+310.37 EUR 310.37
+Commodity Code 85371091990
+Country of Origin IT
+20 10110620 001-1BA00 CM 001 - Pot. distributor 25 EA
+10.00 EUR 250.00
+Commodity Code 85369010000
+Country of Origin TH
+30 10110621 001-1BA10 CM 001 - Pot. distributor 25 EA
+10.00 EUR 250.00
+Commodity Code 85369010000
+2 EA
+
+=== PAGE 2 ===
+Document 980012194
+Date 02-Oct-26
+Currency EUR
+Item Material Description Quant. Unit
+Country of Origin TH
+Batch No 1000450671 23 EA
+40 100-220-986 007-1AB00 - PM 007 - Power module 40 EA
+16.50 EUR 660.00
+Commodity Code 85369010000
+Country of Origin TH
+50 100-221-369 014-CEFORO1 - CPU 014 20 EA
+CPU 014 - SPEED7 Technology
+235.00 EUR 4,699.95
+Commodity Code 85371091990
+Country of Origin DE
+
+=== PAGE 3 ===
+Document 980012194
+Date 02-Oct-26
+Currency EUR
+Item Material Description Quant. Unit
+60 100-220-800 021-1BF00 - SM 021 - Digital input 300 EA
+23.00 EUR 6,900.04
+Commodity Code 85389099990
+Country of Origin TH
+70 100-220-833 022-1BD20 - SM 022 - Digital output 25 EA
+25.00 EUR 625.00
+Commodity Code 85389099990
+Country of Origin TH
+80 100-220-845 022-1BF00 - SM 022 - Digital output 300 EA
+25.00 EUR 7,500.02
+Commodity Code 85389099990
+Country of Origin TH
+90 100-220-824 022-1HB10 - SM 022 - Digital output 3 EA
+23.03 EUR 69.09
+Commodity Code 85389099990
+Country of Origin TH
+
+=== PAGE 4 ===
+Document 980012194
+Date 02-Oct-26
+Currency EUR
+Item Material Description Quant. Unit
+100 100-220-605 031-1BB60 - SM 031 - Analog input 3 EA
+66.00 EUR 198.00
+Commodity Code 85389099990
+Country of Origin TH
+110 100-220-616 031-1BD30 - SM 031 - Analog input 3 EA
+73.00 EUR 219.00
+Commodity Code 85389099990
+Country of Origin TH
+120 100-220-615 031-1BD40 - SM 031 - Analog input 26 EA
+73.00 EUR 1,824.99
+Commodity Code 85389099990
+Country of Origin TH
+130 100-220-623 031-1BD80 - SM 031 - Analog input 2 EA
+102.00 EUR 204.00
+Commodity Code 85389099990
+
+=== PAGE 5 ===
+Document 980012194
+Date 02-Oct-26
+Currency EUR
+Item Material Description Quant. Unit
+Country of Origin TH
+140 100-220-804 031-1CA20 - SM 031 - Analog input 2 EA
+125.00 EUR 250.00
+Commodity Code 85389099990
+Country of Origin TH
+150 400-220-621 031-1CD30 - SM 031 - Analog input 2 EA
+82.00 EUR 164.00
+Commodity Code 85389099990
+Country of Origin TH
+160 100-220-619 031-1CD40 - SM 031 - Analog input 10 EA
+82.00 EUR 820.00
+Commodity Code 85389099990
+Country of Origin TH
+170 100-220-625 031-1CD70 - SM 031 - Analog input 2 EA
+
+=== PAGE 6 ===
+Document 980012194
+Date 02-Oct-26
+Currency EUR
+Item Material Description Quant. Unit
+82.00 EUR 164.00
+Commodity Code 85389099990
+Country of Origin TH
+PO Number: PO/V/712 Date: 10.06.2026
+180 100-220-631 032-1BB40 - SM 032 - Analog output 20 EA
+70.00 EUR 1,399.99
+Commodity Code 85389099990
+Country of Origin TH
+190 100-220-633 032-1BB70 - SM 032 - Analog output 2 EA
+70.00 EUR 140.00
+Commodity Code 85389099990
+Country of Origin TH
+200 100-220-640 032-1BD30 - SM 032 - Analog output 4 EA
+74.00 EUR 296.00
+Commodity Code 85389099990
+Country of Origin TH
+210 100-220-641 032-1BD70 - SM 032 - Analog output 2 EA
+
+=== PAGE 7 ===
+Document 980012194
+Date 02-Oct-26
+Currency EUR
+Item Material Description Quant. Unit
+74.00 EUR 148.00
+Commodity Code 85389099990
+Country of Origin TH
+220 100-220-644 032-1CD70 - SM 032 - Analog output 4 EA
+88.00 EUR 352.00
+Commodity Code 85389099990
+Country of Origin TH
+230 100-220-578 050-1BA00 - FM 050 - Counter module 3 EA
+90.00 EUR 270.00
+Commodity Code 85389099990
+Country of Origin TH
+240 100-220-585 050-1BB30 - FM 050 - Counter module Eco 2 EA
+68.00 EUR 136.00
+Commodity Code 85389099990
+Country of Origin TH
+
+=== PAGE 8 ===
+Document 980012194
+Date 02-Oct-26
+Currency EUR
+item Material Description Quant. Unit
+250 100-220-583 050-1BB40 - FM 050 - Freq. measurement 2 EA
+90.00 EUR 180.00
+Commodity Code 85389099990
+Country of Origin TH
+260 100-220-881 053-1DP00 - IM 053DP - PB-DP slave 20 EA
+71.82 EUR 1,436.40
+Commodity Code 85176200000
+Country of Origin TH
+270 10105571 053-1PN01 - IM 053PN - PROFINET-IO slave 30 EA
+105.42 EUR 3,162.60
+Commodity Code 85176200000
+Country of Origin TH
+280 10099383 H41-71A41-0 - smartPanel TP304-SM 5 EA
+
+=== PAGE 9 ===
+Document 980012194
+Date 02-Oct-26
+Currency EUR
+Item Material Description Quant. Unit
+195.00 EUR 974.99
+Commodity Code 85371091990
+Country of Origin IT
+290 10099384 H71-71A41-0 - smartPanel TP307-SM 10 EA
+294.00 EUR 2,940.04
+Commodity Code 85371091990
+Country of Origin IT
+300 10099382 HA1-71A41-0 - smartPanel TP310-SM 15 EA
+504.00 EUR 7,559.98
+Commodity Code 85371091990
+Country of Origin IT
+310 100-221-370 015-CEFPRO1 - CPU 015PN 25 EA
+CPU 015PN - SPEED7 Technology
+
+=== PAGE 10 ===
+Document 980012194
+Date 02-Oct-26
+Currency EUR
+Item Material Description Quant. Unit
+325.00 EUR 8,125.02
+Commodity Code 85371091990
+Country of Origin DE
+320 10109487 M13-CCF0001 CPU M13C 3 EA
+164.64 EUR 493.92
+Commodity Code 85371091990
+Country of Origin TH
+330 100-221-408 M21-1BH00 - SM M21 - Digital input 4 EA
+48.06 EUR 192.24
+Commodity Code 85389099990
+Country of Origin TH
+340 100-221-409 M22-1BH00 - SM M22 - Digital output 3 EA
+56.96 EUR 170.88
+Commodity Code 85389099990
+
+=== PAGE 11 ===
+Document 980012194
+Date 02-Oct-26
+Currency EUR
+Item Material Description Quant. Unit
+Country of Origin TH
+350 10110620 001-1BA00 CM 001 - Pot. distributor 25 EA
+10.34 EUR 258.50
+Commodity Code 85369010000
+Country of Origin TH
+360 10110622 001-1BA20 CM 001 - Pot. distributor 10 EA
+10.34 EUR 103.40
+Commodity Code 85369010000
+Country of Origin TH
+370 100-220-804 031-1CA20 - SM 031 - Analog input 2 EA
+133.95 EUR 267.90
+Commodity Code 85389099990
+Country of Origin TH
+380 100-220-624 031-1LD80 - SM 031 - Analog input 1 EA
+109.04 EUR 109.04
+Commodity Code 85389099990
+Country of Origin TH
+
+=== PAGE 12 ===
+Document 980012194
+Date 02-Oct-26
+Currency EUR
+Item Material Description Quant. Unit
+390 100-220-578 050-1BA00 - FM 050 - Counter module 5 EA
+95.88 EUR 479.40
+Commodity Code 85389099990
+Country of Origin TH
+400 100-221-095 955-C000S00 - VIPASetCard 002 (VSC) 1 EA
+41.58 EUR 41.58
+Commodity Code 85235190009
+Country of Origin DE
+410 100-221-375 314-2AG23 - VIPA CPU 314SB DPM 4 EA
+CPU 314SB_DPM - SPEED7 Technology
+462.50 EUR 1,850.00
+Commodity Code 85371091990
+Country of Origin CZ
+420 100-221-376 314-2BG23 - VIPA CPU 314SE 4 EA
+CPU 314SE - SPEED7 Technology
+326.65 EUR 1,306.60
+Commodity Code 85371091990
+
+=== PAGE 13 ===
+Document 980012194
+Date 02-Oct-26
+Currency EUR
+item Material Description Quant. Unit
+Country of Origin CZ
+430 100-221-377 314-6CF23 - VIPA CPU 314ST 4 EA
+CPU 314ST - Powered by SPEED7 Technology ; Work memory [KB]: 512...2.048
+846.47 EUR 846.47
+Commodity Code 85371091990
+Country of Origin CZ
+440 100-221-378 314-6CG23 - VIPA CPU 314SC DPM 1 EA
+CPU 314SC_DPM- SPEED7 Technology (300S+)
+872.79 EUR 872.79
+Commodity Code 85371091990
+Country of Origin CZ
+450 100-220-773 321-1BH01 - SM 321 - Digital input 2 EA
+56.35 EUR 112.70
+Commodity Code 85389099990
+Country of Origin TH
+
+=== PAGE 14 ===
+Document 980012194
+Date 02-Oct-26
+Currency EUR
+Item Material Description Quant. Unit
+460 100-220-811 322-1BH01 - SM 322 - Digital output 9 EA
+78.05 EUR 702.45
+Commodity Code 85389099990
+Country of Origin TH
+470 100-220-852 972-0DP10 - EasyConn 90° - PB plug 1,000 EA
+12.80 EUR 12,799.63
+Commodity Code 85366990990
+Country of Origin TH
+480 100-220-848 972-0DP30 - EasyConn 0° - PB plug 200 EA
+13.11 EUR 2,622.00
+Commodity Code 85366990990
+Country of Origin TH
+Total: 75,458.98
+Rate Base Value
+| VAT 0.00 % 75,458.98 0.00]
+Total amount: 75,458.98
+
+=== PAGE 15 ===
+Document 980012194
+Date 02-Oct-26
+Currency EUR
+“YASKAWA Lurono tant YASKAWA Europe Gator)
+YASKAWA Europe ,
+ts —= i :
+ma: thorized Signature
+|__ Authorizes Signature | nee ee a
