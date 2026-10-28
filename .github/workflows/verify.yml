@@ -1,0 +1,50 @@
+name: Verify YASKAWA Accounting Automation
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install Chocolatey Tesseract
+      run: |
+        choco install tesseract --no-progress
+        echo "C:\Program Files\Tesseract-OCR" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run automated test suite
+      run: |
+        pytest test_automation.py -v
+
+    - name: Run accounting pipeline (Headless)
+      env:
+        HEADLESS: "1"
+      run: |
+        python main.py
+
+    - name: Upload Generated Tally Excel Workbooks
+      uses: actions/upload-artifact@v4
+      with:
+        name: tally-excel-deliverables
+        path: |
+          output/YASKAWA_NEW_SHIPMENT.xlsx
+          output/YASKAWA_NEW_SHIPMENT_REVIEW.xlsx
+          output/master_reviewed.xlsx
+        if-no-files-found: warn

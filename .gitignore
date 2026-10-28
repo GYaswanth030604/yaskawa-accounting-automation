@@ -1,0 +1,24 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+
+# Caches
+.pytest_cache/
+input/.cache/
+.cache/
+
+# Local Python & Tesseract binaries (re-installed or downloaded separately)
+py312/
+tesseract/
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Temporary outputs (optional: keep sample workbooks or ignore new runs)
+# output/*.xlsx
