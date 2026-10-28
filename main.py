@@ -204,29 +204,43 @@ class BoEParser:
             extra_desc.sort(key=lambda w: (round(w["top"], 1), w["x0"]))
             full_desc = (desc0 + " " + " ".join(w["text"] for w in extra_desc)).strip()
 
+            # Clean spaces inside part numbers from customs OCR (e.g. '001-1 BA20' -> '001-1BA20', '007-1A B00' -> '007-1AB00', 'H41-71 A41-0' -> 'H41-71A41-0')
+            cleaned_desc = re.sub(r'(\b[0-9A-Z]{3}-[0-9A-Z]{1,2})\s+([0-9A-Z]{2,4}\b)', r'\1\2', full_desc)
+            cleaned_desc = re.sub(r'(\bH[0-9A-Z]{2}-[0-9A-Z]{2})\s+([0-9A-Z]{3,5}\b)', r'\1\2', cleaned_desc)
+
             # Extract Part No from description
-            m_part = re.search(r"\b([0-9A-Z]{3}-[0-9A-Z]{4,8}|H[0-9A-Z]{2}-[0-9A-Z]{4,8}|955-[0-9A-Z]{7})\b", full_desc)
-            part_no = m_part.group(1) if m_part else full_desc.split()[0] if full_desc else f"ITEM-{itemsn}"
+            m_part = re.search(r"\b([0-9A-Z]{3}-[0-9A-Z]{4,8}|H[0-9A-Z]{2}-[0-9A-Z]{4,8}|955-[0-9A-Z]{7}|[A-Z]{2}[0-9A-Z]{5,10})\b", cleaned_desc)
+            part_no = m_part.group(1) if m_part else cleaned_desc.split()[0] if cleaned_desc else f"ITEM-{itemsn}"
 
             # Extract Material Code if present
-            m_mat = re.search(r"MATERIAL:\s*([0-9A-Z-]+)", full_desc)
-            mat_code = m_mat.group(1) if m_mat else ""
+            m_mat = re.search(r"(?:MATERIAL:|100-22\d-\d{3}|101\d{5})\s*([0-9A-Z-]+)?", full_desc)
+            mat_code = m_mat.group(0).strip() if m_mat else ""
 
             # 2. Qty & UPI
-            # Search for quantity near NOS
+            # Search for quantity relative to 13.C.QTY header or NOS
             qty = None
             upi = None
-            nos_words = [w for w in item_words if "NOS" in w["text"] or w["text"] == "S"]
-            qty_line = [w for w in item_words if (ne_top + 15) <= w["top"] <= (ne_top + 35)]
+            cq_words = [w for w in item_words if any(k in w["text"] for k in ["C.QTY", "13.C", "14.C", "11.UPI"])]
+            if cq_words:
+                cq_top = cq_words[0]["top"]
+                qty_line = [w for w in item_words if 6 <= (w["top"] - cq_top) <= 14]
+            else:
+                qty_line = [w for w in item_words if (ne_top + 15) <= w["top"] <= (ne_top + 50)]
             qty_line.sort(key=lambda w: w["x0"])
 
-            # Qty is digits at x0 140 to 190
-            qw = [w["text"] for w in qty_line if 140 <= w["x0"] < 200 and w["text"].isdigit()]
+            # Qty is digits at x0 130 to 205 (before NOS / UQC)
+            qw = [w["text"] for w in qty_line if 130 <= w["x0"] < 205 and w["text"].isdigit()]
             if qw:
                 qty = int("".join(qw))
+            else:
+                # Check for single spaced digits e.g. ['1', '0'] or digits with NOS attached
+                q_candidates = [re.sub(r"[^\d]", "", w["text"]) for w in qty_line if 130 <= w["x0"] < 205]
+                combined = "".join(q_candidates)
+                if combined.isdigit():
+                    qty = int(combined)
 
-            # UPI at x0 60 to 115
-            uw = [w["text"] for w in qty_line if 60 <= w["x0"] < 115]
+            # UPI at x0 60 to 125
+            uw = [w["text"] for w in qty_line if 60 <= w["x0"] < 125]
             u_clean = re.sub(r"[^\d\.]", "", "".join(uw))
             if u_clean:
                 upi = to_decimal(u_clean)
@@ -899,9 +913,9 @@ class AccountingEngine:
                     "sws_tot": sws_tot,
                     "unit_bcd": bcd_tot,
                     "unit_sws": sws_tot,
-                    "po_no": inv_line["po_no"],
-                    "po_date": inv_line["po_date"],
-                    "ocr_flag": inv_line["ocr_flag"]
+                    "po_no": inv_line.get("po_no", ""),
+                    "po_date": inv_line.get("po_date", ""),
+                    "ocr_flag": inv_line.get("ocr_flag", False)
                 })
             else:
                 # Batch No: expand into Q individual unit rows with quantity 1
@@ -946,9 +960,9 @@ class AccountingEngine:
                         "sws_tot": sws_tot,
                         "unit_bcd": u_bcd,
                         "unit_sws": u_sws,
-                        "po_no": inv_line["po_no"],
-                        "po_date": inv_line["po_date"],
-                        "ocr_flag": inv_line["ocr_flag"]
+                        "po_no": inv_line.get("po_no", ""),
+                        "po_date": inv_line.get("po_date", ""),
+                        "ocr_flag": inv_line.get("ocr_flag", False)
                     })
 
         logger.info(f"Expansion complete: {len(self.processed_items)} output item rows generated.")
@@ -1409,29 +1423,43 @@ def run_pipeline(
     output_filename: str = OUTPUT_FILENAME,
     tolerance: str = str(ROUNDING_TOLERANCE)
 ) -> dict:
+    APP_DIR = Path(__file__).resolve().parent
     in_dir = Path(input_folder)
+    if not in_dir.is_absolute():
+        in_dir = (APP_DIR / in_dir).resolve()
     out_dir = Path(output_folder)
+    if not out_dir.is_absolute():
+        out_dir = (APP_DIR / out_dir).resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
 
     logger.info("================================================================================")
     logger.info("STARTING YASKAWA IMPORT ACCOUNTING AUTOMATION PIPELINE")
     logger.info("================================================================================")
 
-    # 1. Locate Input Files
+    # 1. Locate Base Excel Template & Master
     base_path = in_dir / base_excel
     if not base_path.exists():
-        # Fallback to any .xlsx in input folder with 'VIPA' or 'Purchase'
-        cands = list(in_dir.glob("*Purc*.xlsx")) + list(in_dir.glob("*VIPA*.xlsx"))
-        if cands:
-            base_path = cands[0]
+        tmpl_cand = APP_DIR / "templates" / "base.xlsx"
+        if tmpl_cand.exists():
+            base_path = tmpl_cand
         else:
-            raise FileNotFoundError(f"Base Excel workbook not found in {in_dir}")
+            cands = list(in_dir.glob("*Purc*.xlsx")) + list(in_dir.glob("*VIPA*.xlsx")) + list(in_dir.glob("*base*.xlsx"))
+            if not cands:
+                cands = list(APP_DIR.glob("*base*.xlsx")) + list((APP_DIR / "templates").glob("*.xlsx"))
+            if cands:
+                base_path = cands[0]
+            else:
+                raise FileNotFoundError(f"Base Excel template not found. Please place base.xlsx in templates/ or input/.")
 
     master_path = in_dir / master_excel
     if not master_path.exists():
-        cands = list(in_dir.glob("*Master*.xlsx"))
-        if cands:
-            master_path = cands[0]
+        tmpl_master = APP_DIR / "templates" / "master.xlsx"
+        if tmpl_master.exists():
+            master_path = tmpl_master
+        else:
+            cands = list(in_dir.glob("*Master*.xlsx"))
+            if cands:
+                master_path = cands[0]
 
     # Find Commercial Invoice and BoE PDFs
     inv_pdf = None
@@ -1443,10 +1471,10 @@ def run_pipeline(
 
     for pdf_file in pdf_files:
         fname = pdf_file.name.lower()
-        if not inv_pdf and ("invoice" in fname or "rechnung" in fname or "380" in fname):
-            inv_pdf = pdf_file
-        elif not boe_pdf and ("be" in fname or "bill" in fname or "4342140" in fname or "4687" in fname or "icegate" in fname):
+        if not boe_pdf and ("be" in fname or "bill" in fname or "4342140" in fname or "4687" in fname or "2543" in fname or "icegate" in fname):
             boe_pdf = pdf_file
+        elif not inv_pdf and ("invoice" in fname or "rechnung" in fname or "380" in fname):
+            inv_pdf = pdf_file
         elif not dn_pdf and ("delivery" in fname or "dn" in fname or "lieferschein" in fname or "packing" in fname):
             dn_pdf = pdf_file
 
@@ -1457,10 +1485,10 @@ def run_pipeline(
         try:
             doc = fitz.open(pdf_file)
             first_txt = doc[0].get_text() if len(doc) > 0 else ""
-            if not inv_pdf and ("invoice" in first_txt.lower() or "customs invoice" in first_txt.lower()):
-                inv_pdf = pdf_file
-            elif not boe_pdf and ("bill of entry" in first_txt.lower() or "home consumption" in first_txt.lower()):
+            if not boe_pdf and ("bill of entry" in first_txt.lower() or "home consumption" in first_txt.lower()):
                 boe_pdf = pdf_file
+            elif not inv_pdf and ("invoice" in first_txt.lower() or "customs invoice" in first_txt.lower()):
+                inv_pdf = pdf_file
             elif not dn_pdf and ("delivery note" in first_txt.lower() or "lieferschein" in first_txt.lower()):
                 dn_pdf = pdf_file
             elif not inv_pdf and len(first_txt.strip()) == 0:
@@ -1468,33 +1496,80 @@ def run_pipeline(
         except Exception:
             pass
 
-    if not inv_pdf:
-        raise FileNotFoundError(f"Commercial Invoice PDF not found in {in_dir}")
-    if not boe_pdf:
-        raise FileNotFoundError(f"Bill of Entry PDF not found in {in_dir}")
+    if not boe_pdf and not inv_pdf:
+        raise FileNotFoundError(f"No Bill of Entry or Commercial Invoice PDF found in {in_dir}")
 
-    # Ensure Invoice and BoE belong to the same shipment when multiple sample documents exist
-    if boe_pdf and ("4342140" in boe_pdf.name or "11310" in boe_pdf.name):
-        cands = [p for p in pdf_files if ("commercial" in p.name.lower() or "invoice" in p.name.lower()) and "380" not in p.name.lower()]
-        if cands:
-            inv_pdf = cands[0]
-    elif boe_pdf and ("4687" in boe_pdf.name or "02710" in boe_pdf.name):
-        cands = [p for p in pdf_files if "380" in p.name.lower()]
-        if cands:
-            inv_pdf = cands[0]
+    # 2. Extract Bill of Entry
+    if boe_pdf:
+        boe_parser = BoEParser(boe_pdf)
+        boe_data = boe_parser.parse()
+    else:
+        boe_data = {"header": {}, "items": []}
+
+    # Match Commercial Invoice by BoE Invoice No if multiple PDFs are present
+    inv_no_in_boe = str(boe_data.get("header", {}).get("invoice_no") or "").strip()
+    if boe_pdf and inv_no_in_boe:
+        matched_inv = None
+        for p in pdf_files:
+            if p == boe_pdf:
+                continue
+            if inv_no_in_boe in p.name:
+                matched_inv = p
+                break
+        if not matched_inv:
+            # Check known pairings
+            if ("4342140" in boe_pdf.name or "11310" in boe_pdf.name):
+                cands = [p for p in pdf_files if ("commercial" in p.name.lower() or "invoice" in p.name.lower()) and "380" not in p.name.lower()]
+                if cands:
+                    matched_inv = cands[0]
+            elif ("4687" in boe_pdf.name or "02710" in boe_pdf.name):
+                cands = [p for p in pdf_files if "380" in p.name.lower()]
+                if cands:
+                    matched_inv = cands[0]
+        if matched_inv:
+            inv_pdf = matched_inv
 
     logger.info(f"Base Excel: {base_path.name}")
     logger.info(f"Master Excel: {master_path.name if master_path.exists() else 'Not found (auto-creating)'}")
-    logger.info(f"Invoice PDF: {inv_pdf.name}")
-    logger.info(f"Bill of Entry PDF: {boe_pdf.name}")
+    logger.info(f"Bill of Entry PDF: {boe_pdf.name if boe_pdf else 'None'}")
+    logger.info(f"Invoice PDF: {inv_pdf.name if inv_pdf else 'None (synthesized from BoE)'}")
 
-    # 2. Extract Bill of Entry
-    boe_parser = BoEParser(boe_pdf)
-    boe_data = boe_parser.parse()
-
-    # 3. Extract Commercial Invoice
-    inv_parser = InvoiceParser(inv_pdf)
-    inv_data = inv_parser.parse()
+    # 3. Extract or Synthesize Commercial Invoice
+    if inv_pdf and inv_pdf.exists():
+        inv_parser = InvoiceParser(inv_pdf)
+        inv_data = inv_parser.parse()
+    elif boe_pdf:
+        logger.info(f"Commercial Invoice PDF not provided. Synthesizing invoice details from Bill of Entry {boe_pdf.name}.")
+        exch_rate = boe_data["header"].get("exchange_rate") or Decimal("1.00")
+        synth_lines = []
+        for i, it in enumerate(boe_data.get("items", [])):
+            q = it.get("qty") or 1
+            av = it.get("assessable_value", Decimal("0.00"))
+            tot_e = (av / exch_rate).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP) if exch_rate else Decimal("0.00")
+            u_e = (tot_e / Decimal(str(q))).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP) if q else Decimal("0.00")
+            synth_lines.append({
+                "item_no": it.get("itemsn", i + 1),
+                "part_no": it.get("part_no", ""),
+                "description": it.get("description", ""),
+                "qty": q,
+                "unit_price_eur": u_e,
+                "total_eur": tot_e,
+                "po_no": "",
+                "po_date": "",
+                "ocr_flag": False
+            })
+        inv_data = {
+            "header": {
+                "invoice_no": inv_no_in_boe or f"BOE-{boe_data['header'].get('boe_no', '')}",
+                "invoice_date": boe_data["header"].get("be_date") or date.today().strftime("%d-%b-%Y"),
+                "total_eur": boe_data["header"].get("invoice_total_eur", Decimal("0.00")),
+                "currency": boe_data["header"].get("currency", "EUR")
+            },
+            "lines": synth_lines,
+            "is_scanned": False
+        }
+    else:
+        raise FileNotFoundError(f"Neither Commercial Invoice nor Bill of Entry could be extracted.")
 
     # 3.5 Extract Delivery Note (if present)
     dn_entries = []

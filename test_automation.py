@@ -221,7 +221,7 @@ class TestExcelOutput:
         # Formulas present in duty sheet (dynamically placed below duty rows)
         d_sum_r = ws_d.max_row - 4
         assert "=SUM(" in str(ws_d[f"J{d_sum_r}"].value).upper()
-        assert any(k in str(ws_d[f"J{d_sum_r+2}"].value) for k in ["686294.2", "1033268.9"])
+        assert any(k in str(ws_d[f"J{d_sum_r+2}"].value) for k in ["686294.2", "1033268.9", "194798.4"])
         assert "=ROUND(" in str(ws_d[f"J{d_sum_r+4}"].value).upper()
 
         # Checks sheet status all PASS

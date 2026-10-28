@@ -536,7 +536,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             <td>${f.size}</td>
             <td style="color: var(--muted);">${f.date}</td>
             <td style="text-align: center;">
-              <button class="btn btn-danger" onclick="deleteFile('${encodeURIComponent(f.name)}')">Delete</button>
+              ${f.name.toLowerCase() === 'base.xlsx' 
+                ? '<span style="color: #60a5fa; font-size: 11px; font-weight: 600;">🔒 Protected</span>' 
+                : `<button class="btn btn-danger" onclick="deleteFile('${encodeURIComponent(f.name)}')">Delete</button>`}
             </td>
           `;
           tbody.appendChild(tr);
@@ -994,7 +996,13 @@ class AutomationHttpServer(BaseHTTPRequestHandler):
                 pipeline_state["result"] = None
                 pipeline_state["error"] = None
                 try:
-                    res = run_pipeline()
+                    res = run_pipeline(
+                        input_folder=str(WORKSPACE_ROOT / INPUT_FOLDER),
+                        output_folder=str(WORKSPACE_ROOT / OUTPUT_FOLDER),
+                        base_excel=BASE_EXCEL,
+                        master_excel=MASTER_EXCEL,
+                        output_filename=OUTPUT_FILENAME
+                    )
                     pipeline_state["result"] = res
                 except Exception as ex:
                     pipeline_state["error"] = str(ex)
@@ -1026,6 +1034,12 @@ class AutomationHttpServer(BaseHTTPRequestHandler):
                 return
 
             target = WORKSPACE_ROOT / INPUT_FOLDER / Path(filename).name
+            if target.name.lower() == "base.xlsx":
+                self.send_response(400)
+                self.end_headers()
+                self.wfile.write(b"base.xlsx is the core template and cannot be deleted.")
+                return
+
             if target.exists() and target.is_file():
                 try:
                     target.unlink()
