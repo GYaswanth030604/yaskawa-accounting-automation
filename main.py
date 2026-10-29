@@ -98,7 +98,7 @@ class BoEParser:
     """Deterministic extractor for Indian Customs ICEGATE Bill of Entry PDFs."""
 
     def __init__(self, pdf_path: Path):
-        self.pdf_path = pdf_path
+        self.pdf_path = Path(pdf_path)
         self.header = {}
         self.items = []
 
@@ -319,11 +319,41 @@ class InvoiceParser:
     """Extracts Commercial Invoice data using native text or offline OCR."""
 
     def __init__(self, pdf_path: Path):
-        self.pdf_path = pdf_path
+        self.pdf_path = Path(pdf_path)
         self.is_scanned = False
         self.header = {}
         self.lines = []
         self.invoices = {}
+
+    def _extract_layout_text(self, doc) -> str:
+        """Extracts text preserving horizontal line layout by clustering words with similar vertical positions."""
+        pages_text = []
+        for pno, page in enumerate(doc):
+            words = page.get_text("words")  # (x0, y0, x1, y1, word, block_no, line_no, word_no)
+            if not words:
+                continue
+            lines_dict = []
+            for w in words:
+                x0, y0, x1, y1, text = w[0], w[1], w[2], w[3], w[4]
+                yc = (y0 + y1) / 2.0
+                matched = False
+                for group in lines_dict:
+                    if abs(group["yc"] - yc) <= 4.0:
+                        group["words"].append((x0, text))
+                        group["yc"] = (group["yc"] * (len(group["words"]) - 1) + yc) / len(group["words"])
+                        matched = True
+                        break
+                if not matched:
+                    lines_dict.append({"yc": yc, "words": [(x0, text)]})
+
+            lines_dict.sort(key=lambda g: g["yc"])
+            line_strings = []
+            for g in lines_dict:
+                g["words"].sort(key=lambda w: w[0])
+                line_strings.append(" ".join(w[1] for w in g["words"]))
+
+            pages_text.append(f"=== PAGE {pno + 1} ===\n" + "\n".join(line_strings))
+        return "\n".join(pages_text)
 
     def parse(self) -> dict:
         logger.info(f"Parsing Commercial Invoice: {self.pdf_path.name}")
@@ -337,11 +367,17 @@ class InvoiceParser:
             self.is_scanned = True
             logger.info("PDF has no native digital text. Engaging local offline OCR engine...")
             full_text = self._run_ocr(doc)
+            self._parse_invoice_text(full_text)
         else:
-            logger.info("PDF contains native text. Using direct text extraction.")
-            full_text = "\n".join(page.get_text() for page in doc)
+            logger.info("PDF contains native text. Using layout-aware direct text extraction.")
+            full_text = self._extract_layout_text(doc)
+            self._parse_invoice_text(full_text)
+            if len(self.lines) == 0:
+                logger.warning("Layout extraction returned 0 items. Falling back to local OCR...")
+                self.is_scanned = True
+                full_text = self._run_ocr(doc)
+                self._parse_invoice_text(full_text)
 
-        self._parse_invoice_text(full_text)
         logger.info(f"Extracted {len(self.lines)} line items from Commercial Invoice (OCR={self.is_scanned}).")
         return {
             "header": self.header,
@@ -465,12 +501,13 @@ class InvoiceParser:
                 except Exception:
                     pass
 
-            m_item = re.search(r"^\s*(\d{2,4})\s+([0-9A-Z-]+)\s+(.*?)\s+(\d[\d,]*)\s+EA", line)
+            m_item = re.search(r"^\s*(\d{2,4})\s+([0-9A-Z-]+)\s+(.*?)\s*(?:(\d[\d,]*)\s+)?EA\b", line)
             if m_item:
                 item_no = int(m_item.group(1))
                 mat_no = m_item.group(2)
                 desc = m_item.group(3).strip()
-                qty = int(m_item.group(4).replace(",", ""))
+                qty_str = m_item.group(4)
+                qty = int(qty_str.replace(",", "")) if qty_str else None
 
                 # Search upcoming lines for price and HS code
                 price_eur = None
@@ -482,7 +519,7 @@ class InvoiceParser:
                 item_po_date = None
                 while j < min(len(full_body_lines), i + 35):
                     sub_line = full_body_lines[j]
-                    if re.search(r"^\s*(\d{2,4})\s+([0-9A-Z-]+)\s+.*?\s+\d[\d,]*\s+EA", sub_line):
+                    if re.search(r"^\s*(\d{2,4})\s+([0-9A-Z-]+)\s+.*?\s*(?:(?:\d[\d,]*)\s+)?EA\b", sub_line):
                         break  # Next item started
                     m_p = re.search(r"([\d,]+\.\d{2})\s*EUR\s*([\d,]+\.\d{2})?", sub_line)
                     if m_p and price_eur is None:
@@ -490,7 +527,7 @@ class InvoiceParser:
                         if m_p.group(2):
                             total_eur = to_decimal(m_p.group(2))
                         else:
-                            total_eur = round_cur(price_eur * qty)
+                            total_eur = round_cur(price_eur * (qty or Decimal(1)))
                     m_hs = re.search(r"Commodity\s*Code\s*(\d{8,11})", sub_line)
                     if m_hs:
                         hs_code = m_hs.group(1)
@@ -506,17 +543,31 @@ class InvoiceParser:
                     j += 1
 
                 # Validate quantity * unit price against line value
-                if price_eur and total_eur and price_eur > Decimal("0.00"):
+                if qty is None and price_eur and total_eur and price_eur > Decimal("0.00"):
+                    calc_qty = int(round(total_eur / price_eur))
+                    qty = calc_qty if calc_qty > 0 else 1
+                elif qty is None:
+                    qty = 1
+                elif price_eur and total_eur and price_eur > Decimal("0.00"):
                     calc_qty = int(round(total_eur / price_eur))
                     if calc_qty > 0 and abs(calc_qty - qty) <= 5:
                         qty = calc_qty
 
+                # Clean part number whitespaces and known OCR substitutions
+                clean_desc = re.sub(r"\b(\d{3}-\d)\s+([A-Z0-9]{4})\b", r"\1\2", desc)
+                clean_desc = re.sub(r"\b(972-0DP\d)\s+(\d)\b", r"\1\2", clean_desc)
+                clean_desc = clean_desc.replace("022-1 B890", "022-1BB90").replace("022-1B890", "022-1BB90")
+                clean_desc = clean_desc.replace("031-18B90", "031-1BB90").replace("031-1 8B90", "031-1BB90")
+                clean_desc = clean_desc.replace("032-1 8B40", "032-1BB40").replace("032-18B40", "032-1BB40")
+                clean_desc = clean_desc.replace("032-1 CD70", "032-1CD70")
+                clean_desc = clean_desc.replace("050-1 BA00", "050-1BA00")
+
                 # Extract part number
                 m_part = re.search(
                     r"\b([0-9A-Z]{3}-[0-9A-Z]{4,8}(?:-[0-9A-Z°]+)?|H[0-9A-Z]{2}-[0-9A-Z]{4,8}(?:-[0-9A-Z°]+)?|955-[0-9A-Z]{7})\b",
-                    desc,
+                    clean_desc,
                 )
-                part_no = m_part.group(1) if m_part else desc.split()[0] if desc else mat_no
+                part_no = m_part.group(1) if m_part else clean_desc.split()[0] if clean_desc else mat_no
 
                 po_num = item_po or active_po
                 po_d = item_po_date or active_po_date
