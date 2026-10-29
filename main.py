@@ -472,7 +472,7 @@ class InvoiceParser:
         active_inv_no = default_inv_no
         active_inv_date = default_inv_date
         active_po = "PO/V/712"
-        active_po_date = date(2026, 6, 10)
+        active_po_date = default_inv_date
 
         i = 0
         while i < len(full_body_lines):
@@ -491,13 +491,15 @@ class InvoiceParser:
                     pass
 
             # Track PO transitions
-            m_po = re.search(r"PO\s*Number:?\s*([A-Za-z0-9/]+)", line)
+            m_po = re.search(r"PO\s*(?:Number|No)?[.:\s]*([0-9A-Za-z/_-]+)", line, re.IGNORECASE)
             if m_po:
-                active_po = m_po.group(1).strip()
-            m_pod = re.search(r"Date:?\s*(\d{2}[\./-]\d{2}[\./-]\d{4})", line)
+                cand_po = m_po.group(1).strip()
+                if cand_po.lower() not in ("see", "item", "details", "none", "na", "n/a", "as", "per", "null") and len(cand_po) >= 3:
+                    active_po = cand_po
+            m_pod = re.search(r"PO\s*Number:.*?Date:\s*(\d{2}[\./-]\d{2}[\./-]\d{4})", line, re.IGNORECASE)
             if m_pod:
                 try:
-                    active_po_date = datetime.strptime(m_pod.group(1), "%d.%m.%Y").date()
+                    active_po_date = datetime.strptime(m_pod.group(1).replace("-", "."), "%d.%m.%Y").date()
                 except Exception:
                     pass
 
@@ -531,9 +533,11 @@ class InvoiceParser:
                     m_hs = re.search(r"Commodity\s*Code\s*(\d{8,11})", sub_line)
                     if m_hs:
                         hs_code = m_hs.group(1)
-                    m_po = re.search(r"PO\s*Number:\s*([0-9A-Za-z/_-]+)", sub_line, re.IGNORECASE)
+                    m_po = re.search(r"PO\s*(?:Number|No)?[.:\s]*([0-9A-Za-z/_-]+)", sub_line, re.IGNORECASE)
                     if m_po:
-                        item_po = m_po.group(1).strip()
+                        cand_po = m_po.group(1).strip()
+                        if cand_po.lower() not in ("see", "item", "details", "none", "na", "n/a", "as", "per", "null") and len(cand_po) >= 3:
+                            item_po = cand_po
                     m_pod = re.search(r"PO\s*Number:.*?Date:\s*(\d{2}[\./-]\d{2}[\./-]\d{4})", sub_line, re.IGNORECASE)
                     if m_pod:
                         try:
@@ -689,9 +693,11 @@ class DeliveryNoteParser:
             dn_no = m_dn.group(1).strip()
 
         po_no = ""
-        m_po = re.search(r"(?:PO|Order|Bestell)[-\s\.:#]*([0-9A-Za-z-]+)", full_text, re.IGNORECASE)
+        m_po = re.search(r"(?:PO|Order|Bestell)[-\s\.:#]*([0-9A-Za-z/_-]+)", full_text, re.IGNORECASE)
         if m_po:
-            po_no = m_po.group(1).strip()
+            cand_po = m_po.group(1).strip()
+            if cand_po.lower() not in ("see", "item", "details", "none", "na", "n/a", "as", "per", "null") and len(cand_po) >= 3:
+                po_no = cand_po
 
         # 4. Extract Items and Serial Ranges
         lines = full_text.splitlines()
