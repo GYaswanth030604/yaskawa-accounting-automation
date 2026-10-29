@@ -1,0 +1,693 @@
+=== PAGE 1 ===
+YASKAWA Europe GmbH, Philipp-Reis-StraBe 6, i \
+VIPA Automation India Pvt Ltd.
+3rd Floor,k B.R. House, Invoice No. 980011869
+es
+Sales Assistant Katja Fontaine
+Telephone Number +49 (0) 6196 569 489
+E-Mail a
+Currency EUR
+Conditions \ ! : :
+Terms of delivery CIP Bangalore
+iisera, Material) (0) peseipton) (0 i i rouanulone
+With delivery 80293584 from 09.07.2026
+10 10110620 001-1BA00 CM 001 - Pot. distributor 25 EA
+10.00 EUR 250.00
+Commodity Code 85369010000
+Order: 4 267391 -10 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 001-1
+PO Number: PO/V/710 Date: 10.06.2026
+20 10110621 001-1BA10 CM 001 - Pot. distributor 25 EA
+10.00 EUR 250.00
+Commodity Code 85369010000
+Order: 267391 -20 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 001-1BA10
+PO Number: PO/V/710 Date: 10.06.2026
+30 100-220-986 007-1ABO00 - PM 007 - Power module 40 EA
+PM 007 - Power module
+Power supply DC 24V, 10A
+Reverse polarity protection
+Overvoltage protection
+16.50 EUR 660.00
+Commodity Code 85369010000
+Order: 267391 -30 Date: 15.06.2026
+Country of Oriain Ty
+
+=== PAGE 2 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+Item = Material = ———s(Description ec |) Quant. | Unit
+Customer Material: 007-1
+PO Number: PO/V/710 Date: 10.06.2026
+40 100-221-369 014-CEFORO1 - CPU 014 20 EA
+CPU 014 - SPEED7 Technology
+SPEED7 technology
+128 kB work memory
+Memory extension (max. 256 kB)
+Interface 1: RJ45 Switch: Active Ethernet & PG/OP communication
+Interface 2: RS485 (potential separated): MPI, USS master, ASCII, ETX/STX, 3964R,
+Modbus master/slave (switchable)
+Interface 3: RS485 (potential separated), MPI (optional PROFIBUS slave or PROFIBUS
+master)
+Interface 4: RJ45 switch: active Ethernet & PG/OP communication
+SD card slot with interlock
+connection of up 64 SLIO modules possible
+programmable with SPEED7 Studio, SIMATIC Manager or TIA Portal
+235.00 EUR 4,699.95
+Commodity Code 85371091990
+Order: 267391 -40 Date: 15.06.2026
+Country of Origin DE
+Customer Material: 014-CEFOR01
+PO Number: PO/V/710 Date: 10.06.2026
+50 100-220-800 021-1BFO00 - SM 021 - Digital input 300 EA
+021-1BF00 SM 021 Digital Input 8xDI DC24Vv
+23.00 EUR 6,900.03
+Commodity Code 85389099990
+Order: 267391 -60 Date: 15.06.2026
+Batch No 1000431717 205 EA
+Country of Origin TH
+Batch No 1000437714 95 EA
+Country of Origin TH
+Country of Origin TH
+Customer Material: 021-1BFO0O
+PO Number: PO/V/710 Date: 10.06.2026
+60 100-220-833 022-1BD20 - SM 022 - Digital output 25 EA
+SM 022 - Digital output
+
+=== PAGE 3 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+Item Material Description Quant. = Unit
+4 outputs
+Output current 2 A 25.00 EUR 625.00
+Commodity Code 85389099990
+Order: 267391 - 70 Date: 15.06.2026
+Country of Origin TH
+Customer Material: BD20
+PO Number: PO/V/710 Date: 10.06.2026
+70 100-220-845 022-1BFO0 - SM 022 - Digital output 300 EA
+SM 022 - Digital output
+8 outputs
+Output current 0,5 A
+25.00 EUR 7,500.02
+Commodity Code 85389099990
+Order: 267391 -80 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 022-1
+PO Number: PO/V/710 Date: 10.06.2026
+80 100-220-824 022-1HB10 - SM 022 - Digital output 3 EA
+SM 022 - Digital output
+2 relay outputs
+DC 30V / AC 230 V
+Output current 3 A
+23.03 EUR 69.09
+Commodity Code 85389099990
+Order: 267391 - 90 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 022-1HB10
+PO Number: PO/V/710 Date: 10.06.2026
+90 100-220-605 031-1BB60 - SM 031 - Analog input s EA
+SM 031 - Analog input
+2 inputs 12Bit
+Current 420mA
+2wire
+66.00 EUR 198.00
+Commodity Code 85389099990
+Order: 267391 - 100 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 031
+PO Number: PO/V/710 Date: 10.06.2026
+
+=== PAGE 4 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+Item Material = = =~—_—s&Deesccription a Co a Sore Bale
+100 100-220-616 031-1BD30 - SM 031 - Analog input 3 EA
+SM 031 - Analog input
+4 inputs 12Bit
+Voltage 010 V
+73.00 EUR 219.00
+Commodity Code 85389099990
+Order: 267391 - 110 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 031-1BD30
+PO Number: PO/V/710 Date: 10.06.2026
+110 100-220-615 031-1BD40 - SM 031 - Analog input 25 EA
+SM 031 - Analog input
+4 inputs 12Bit
+Current 0(4)20mA
+73.00 EUR 1,824.99
+Commodity Code 85389099990
+Order: 267391 -120 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 031-1
+PO Number: PO/V/710 Date: 10.06.2026
+120 100-220-623 031-1BD80 - SM 031 - Analog input 2 EA
+SM 031 - Analog input
+4 inputs 16Bit
+03000 ohm resistance
+Resistance measurement with 2-, 3- and 4-wires
+102.00 EUR 204.00
+Commodity Code 85389099990
+Order: 267391 - 130 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 031-1BD80
+PO Number: PO/V/710 Date: 10.06.2026
+130 100-220-804 031-1CA20 - SM 031 - Analog input 2 EA
+SM 031 - Analog input
+Direct connection of a resistor full bridge (DMS) or load cell
+4- or 6-wire connection
+16 (24) Bit resolution
+Auto/self calibration zero point and final value
+Absolute exactness radical error ??0,1% (?70,01%)
+Onboard power supply 2V5, 5V, 7V5, 10V and 12V
+125.00 EUR 250.00
+
+=== PAGE 5 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+Item Material Description ee a -()) Quant!) unit
+Commodity Code 85389099990
+Order: 267391 - 140 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 031-1CA20
+PO Number: PO/V/710 Date: 10.06.2026
+140 100-220-621 031-1CD30 - SM 031 - Analog input 2 EA
+SM 031 - Analog input
+4 inputs 16Bit
+Voltage 010 V
+82.00 EUR 164.00
+Commodity Code 85389099990
+Order: 267391 - 150 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 031-1CD30
+PO Number: PO/V/710 Date: 10.06.2026
+150 100-220-619 031-1CD40 - SM 031 - Analog input 10 EA
+SM 031 - Analog input
+4 inputs 16Bit
+Current 0(4)20mA
+82.00 EUR 820.00
+Commodity Code 85389099990
+Order: 267391 - 160 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 031-1CD40
+PO Number: PO/V/710 Date: 10.06.2026
+160 100-220-625 031-1CD70 - SM 031 - Analog input 2 EA
+SM 031 - Analog input
+4 inputs 16Bit
+Voltage -10 V+10 V
+82.00 EUR 164.00
+Commodity Code 85389099990
+Order: 267391 -170 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 031-1CD70
+PO Number: PO/V/710 Date: 10.06.2026
+170 100-220-631 032-1BB40 - SM 032 - Analog output 20 EA
+SM 032 - Analog output
+2 outputs 12Bit
+Current 0(4)20 mA
+
+=== PAGE 6 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+Item Material _ Description i ae oe. | Quant. Unit
+—_ - : 70.00 EUR 1,399.99
+Commodity Code 85389099990
+Order: 267391 - 180 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 032-1
+PO Number: PO/V/710 Date: 10.06.2026
+180 100-220-633 032-1BB70 - SM 032 - Analog output 2 EA
+SM 032 - Analog output
+2 outputs 12Bit
+Voltage -10 V+10 V
+70.00 EUR 140.00
+Commodity Code 85389099990
+Order: 267391 -190 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 032-1
+PO Number: PO/V/710 Date: 10.06.2026
+190 100-220-640 032-1BD30 - SM 032 - Analog output 4 EA
+SM 032 - Analog output
+4 outputs 12Bit
+Voltage 010 V
+74.00 EUR 296.00
+Commodity Code 85389099990
+Order: 267391 -200 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 032-1
+PO Number: PO/V/710 Date: 10.06.2026
+200 100-220-641 032-1BD70 - SM 032 - Analog output 2 EA
+SM 032 - Analog output
+4 outputs 12Bit
+Voltage -10 V+10 V
+74.00 EUR 148.00
+Commodity Code 85389099990
+Order: 267391 -210 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 032-1
+PO Number: PO/V/710 Date: 10.06.2026
+210 100-220-644 032-1CD70 - SM 032 - Analog output 4 EA
+SM 032 - Analog output
+
+=== PAGE 7 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+; 4 outputs 16Bit
+Voltage -10 V+10 V 88.00 EUR 352.00
+Commodity Code 85389099990
+Order: 267391 - 220 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 032-1
+PO Number: PO/V/710 Date: 10.06.2026
+220 100-220-578 050-1BAOO - FM 050 - Counter module 3 EA
+FM 050 - Counter module
+1 Counter 32 Bit (AB)
+DC 24V
+90.00 EUR 270.00
+Commodity Code 85389099990
+Order: 267391 -230 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 050-1BA00
+PO Number: PO/V/710 Date: 10.06.2026
+230 100-220-585 050-1BB30 - FM 050 - Counter module Eco 2 EA
+FM 050 - Counter module
+2 Counter 32 Bit (AB)
+DC 24V
+68.00 EUR 136.00
+Commodity Code 85389099990
+Order: 267391 - 240 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 050-1BB30
+PO Number: PO/V/710 Date: 10.06.2026
+240 100-220-583 050-1BB40 - FM 050 - Freq. measurement 2 EA
+FM 050 - Counter module
+2 Channels 24 Bit (AB)
+DC 24V
+90.00 EUR 180.00
+Commodity Code 85389099990
+Order: 267391 - 250 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 050-1
+PO Number: PO/V/710 Date: 10.06.2026
+250 100-220-881 053-1DP00 - IM 053DP - PB-DP slave 20 EA
+IA ALOTARD § Pisce thes ce FRE nln cc
+
+=== PAGE 8 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+Item Material ( Description / i | Quant. Unit
+PROFIBUS-DP slave (DP-VO, DP-V1)
+244 Byte input and 244 Byte output data
+up to 64 peripheral modules
+71.82 EUR 1,436.40
+Commodity Code 85176200000
+Order: 267391 - 260 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 053-1
+PO Number: PO/V/710 Date: 10.06.2026
+260 10099383 H41-71A41-0 - smartPanel TP304-SM 5 EA
+" Display: 4™""
+* Processor: Cortex-A8 / 1000 MHz
+* RAM [MB]: 512
+* User memory [MB]: 4 GB
+* Interface onboard: 1x RS232/422/485 / 1x USB-A/ 1x RJ45 (Ethernet)
+* Software: WEC7 / Movicon CE Standard
+195.00 EUR 974.99
+Commodity Code 85371091990
+Order: 267391 - 290 Date: 15.06.2026
+Country of Origin IT
+Customer Material: H41-71
+PO Number: PO/V/710 Date: 10.06.2026
+270 10099384 H71-71A41-0 - smartPanel TP307-SM 10 EA
+"* Display: 7"""
+* Processor: Cortex-A8 / 1000 MHz
+* RAM [MB]: 512
+* User memory [MB]: 4 GB
+* Interface oboard: 1x RS232/422/485 / 1x USB-A / 1x RJ45 (Ethernet)
+* Software: WEC7 / Movicon CE Standard
+294.00 EUR 2,940.04
+Commodity Code 85371091990
+Order: 267391 - 300 Date: 15.06.2026
+Couniry of Origin IT
+Customer Material: TP307-SM
+PO Number: PO/V/710 Date: 10.06.2026
+280 10099382 HA1-71A41-0 - smartPanel TP310-SM 15 EA
+"* Display: 10"""
+* Processor: Cortex-A8 / 1000 MHz
+* RAM [MB]: 512
+* User memory [MB]: 4 GB
+
+=== PAGE 9 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+Item Material Description / | Quant. Unit
+* Interface oboard: 1x RS232/422/485 / 1x USB-A/ 1x RJ45 (Ethernet)
+* Software: WEC7 / Movicon CE Stan@aog EUR 7,559.98
+Commodity Code 85371091990
+Order: 267391 - 310 Date: 15.06.2026
+Country of Origin IT
+Customer Material: HA1-71A41-0
+PO Number: PO/V/710 Date: 10.06.2026
+290 10110625 830-OLC00 FCC 2xAWG 22 - PB cable 5 EA
+75.00 EUR 375.00
+Copper Surcharge 15.87 EUR 172.19
+109.44 EUR 547.19
+Commodity Code 85442000800
+Order: 267391 - 320 Date: 15.06.2026
+Country of Origin DE
+Customer Material: 830-0LC00
+PO Number: PO/V/710 Date: 10.06.2026
+300 10110627 830-0PCO0 PROFINET cable 5 EA
+135.00 EUR 675.00
+Copper Surcharge 15.87 EUR 241.22
+183.24 EUR 916.22
+Commodity Code 85442000900
+Order: 267391 - 330 Date: 15.06.2026
+Country of Origin DE
+Customer Material: 830-O0PC00
+PO Number: PO/V/710 Date: 10.06.2026
+310 10110621 001-1BA10 CM 001 - Pot. distributor 35 EA
+10.00 EUR 350.00
+Commodity Code 85369010000
+Order: 269167 -10 Date: 09.07.2026
+Country of Origin TH
+PO Number: PO/V/714 Date: 09.07.2026
+320 100-221-369 014-CEFORO1 - CPU 014 10 EA
+CPU 014 - SPEED7 Technology
+SPEED7 technology
+128 kB work memory
+Memory extension (max. 256 kB)
+Interface 1: RJ45 Switch: Active Ethernet & PG/OP communication
+Interface 2: RS485 (potential separated): MPI, USS master, ASCII, ETX/STX, 3964R,
+
+=== PAGE 10 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+Item Material i Description a he : Quant. Unit
+~ “Interface 3: RS485 (potential separated), MPI (optional PROFIBUS slave or PROFIBUS
+master)
+Interface 4: RJ45 switch: active Ethernet & PG/OP communication
+SD card slot with interlock
+connection of up 64 SLIO modules possible
+programmable with SPEED7 Studio, SIMATIC Manager or TIA Portal
+235.00 EUR 2,350.00
+Commodity Code 85371091990
+Order: 269167 -20 Date: 09.07.2026
+Country of Origin DE
+PO Number: PO/V/714 Date: 09.07.2026
+330 100-221-370 015-CEFPRO1 - CPU 015PN 10 EA
+CPU 015PN - SPEED7 Technology
+SPEED7 technology
+256 kB work memory
+Memory extension (max. 512 kB)
+Interface 1: RJ45 Switch: active Ethernet & PG/OP communication
+Interface 2: RS485 (potential separated): MPI, USS master, ASCII, ETX/STX, 3964R,
+Modbus master/slave (switchable)
+Interface 3: RS485 (potential separated), MPI (optional PROFIBUS slave or PROFIBUS
+master)
+Interface 4: RJ45 Switch: PROFINET controller for up to 128 participants
+"Interface 5: RJ45 Switch; active Ethernet & PG/OP communication"
+Interface 6: RJ45 switch: PROFINET controller for up to 128 participants
+SD card slot with interlock
+connection of up to 64 SLIO modules possible
+programmable with SPEED7 Studio, SIMATIC Manager or TIA Portal
+325.00 EUR 3,250.00
+Commodity Code 85371091990
+Order: 269167 -30 Date: 09.07.2026
+Country of Origin DE
+PO Number: PO/V/714 Date: 09.07.2026
+340 100-220-800 021-1BFO00 - SM 021 - Digital input 200 EA
+021-1BF00 SM 021 Digital Input 8xDI DC24V
+23.00 EUR 4,600.00
+Commodity Code 85389099990
+Order: 269167 - 40 Date: 09.07.2026
+Country of Origin TH
+PO Number: PO/V/714 Date: 09.07.2026
+350 100-220-833 022-1BD20 - SM 022 - Digital output 5 EA
+SM 022 - Digital output
+
+=== PAGE 11 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+Item Material _ Description ah ta Quant. Unit
+4 outputs
+Output current 2 A 25.00 EUR 425.00
+Commodity Code 85389099990
+Order: 269167 -50 Date: 09.07.2026
+Country of Origin TH
+PO Number: PO/V/714 Date: 09.07.2026
+360 100-220-845 022-1BF00 - SM 022 - Digital output 100 EA
+SM 022 - Digital output
+8 outputs
+Output current 0,5 A
+25.00 EUR 2,500.00
+Commodity Code 85389099990
+Order: 269167 -60 Date: 09.07.2026
+Country of Origin TH
+PO Number: PO/V/714 Date: 09.07.2026
+370 100-220-602 031-1BB30 - SM 031 - Analog input 1 EA
+SM 031 - Analog input
+2 inputs 12Bit
+Voltage 010 V
+70.50 EUR 70.50
+Commodity Code 85389099990
+Order: 269167 -70 Date: 09.07.2026
+Country of Origin TH
+PO Number: PO/V/714 Date: 09.07.2026
+380 100-220-616 031-1BD30 - SM 031 - Analog input 5 EA
+SM 031 - Analog input
+4 inputs 12Bit
+Voltage 010 V
+73.00 EUR 365.00
+Commodity Code 85389099990
+Order: 269167 -80 Date: 09.07.2026
+Country of Origin TH
+PO Number: PO/V/714 Date: 09.07.2026
+390 100-220-640 032-1BD30 - SM 032 - Analog output 15 EA
+SM 032 - Analog output
+4 outputs 12Bit
+Voltage 010 V
+74.00 EUR 1,110.00
+Commodity Code 85389099990
+
+=== PAGE 12 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+Item / Material _ Description _ : “ a Nea a Quant. Unit
+Order: 269167 - 90 Date: 09.07.2026
+Country of Origin TH
+PO Number: PO/V/714 Date: 09.07.2026
+400 100-220-881 053-1DPOO - IM 053DP - PB-DP slave 5 EA
+IM 053DP - Profibus-DP slave
+PROFIBUS-DP slave (DP-VO, DP-V1)
+244 Byte input and 244 Byte output data
+up to 64 peripheral modules
+71.82 EUR 359.10
+Commodity Code 85176200000
+Order: 269167 -100 Date: 09.07.2026
+Country of Origin TH
+PO Number: PO/V/714 Date: 09.07.2026
+410 10105571 053-1PNO1 - IM 053PN - PROFINET-IO slave 30 EA
+IM 053PN - PROFINET-IRT-Slave
+PROFINET-IRT slave
+(Ilsochronous Real Time communication)
+Transfer rate 100Mbit/s
+up to 64 peripheral modules
+105.42 EUR 3,162.60
+Commodity Code 85176200000
+Order: 269167 -110 Date: 09.07.2026
+Country of Origin TH
+PO Number: PO/V/714 Date: 09.07.2026
+420 100-221-379 315-2AG23 - VIPA CPU 315SB 3 EA
+CPU 315SB - SPEED7 Technology
+DC 24V, 1MB work memory
+Memory extension (max. 4MB)
+MPI, MMC slot, real-time clock\Interface: Profibus DP master, 12Mbit/s up to 124
+slaves/PtP RS485, potential separated, ASCII, STX/E
+TX,3964R,Modbusmaster,USSmaster,EthernetinterfaceforPG/OPcommunication
+638.00 EUR 1,914.00
+Commodity Code 85371091990
+Order: 269167 -120 Date: 09.07.2026
+Batch No H297953300 2 EA
+Country of Origin CZ
+Batch No H298339600 1 EA
+Country of Origin ©7
+
+=== PAGE 13 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+Item Material == — Description = ) ae a Quant. Unit
+Country of Origin CZ
+PO Number: PO/V/714 Date: 09.07.2026
+430 10091642 SW110T1MA - OPC Server S7 TCP/IP License 1 EA
+* Sealed Envelope with single user license for VIPA OPC Server, Software Download
+* PG/OP/TCP/IP-communication (PC: Ethernet Port <-> PLC Ehternet Port)
+* All VIPA PLCs with integrated PG/OP interface
+* Windows XP (SP3), Windows Vista, Windows 7 (32bit/64bit)
+* Windows Server 2003 (SP2), Windows Server 2008, Windows Server 2008 R2
+191.00 EUR 191.00
+Commodity Code 49119900000
+Order: 269167 - 130 Date: 09.07.2026
+Country of Origin DE
+PO Number: PO/V/714 Date: 09.07.2026
+440 10099383 H41-71A41-0 - smartPanel TP304-SM 2 EA
+"* Display: 4"""
+* Processor: Cortex-A8 / 1000 MHz
+* RAM [MB]: 512
+* User memory [MB]: 4 GB
+* Interface onboard: 1x RS232/422/485 / 1x USB-A / 1x RU45 (Ethernet)
+* Software: WEC7 / Movicon CE Standard
+195.00 EUR 390.00
+Commodity Code 85371091990
+Order: 269167 -140 Date: 09.07.2026
+Country of Origin IT
+PO Number: PO/V/714 Date: 09.07.2026
+450 10099384 H71-71A41-0 - smartPanel TP307-SM 3 EA
+"* Display: 7"""
+* Processor: Cortex-A8 / 1000 MHz
+* RAM [MB]: 512
+* User memory [MB]: 4 GB
+* Interface oboard: 1x RS232/422/485 / 1x USB-A / 1x Ru45 (Ethernet)
+* Software: WEC7 / Movicon CE Standard
+294.00 EUR 882.00
+Commodity Code 85371091990
+Order: 269167 - 150 Date: 09.07.2026
+Country of Origin IT
+PO Number: PO/V/714 Date: 09.07.2026
+460 10099382 HA1-71A41-0 - smartPanel TP310-SM 10 EA
+"* Display: 10"""
+* Processor: Cortex-A8 / 1000 MHz
+
+=== PAGE 14 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+Item Material Description ay Quant. Unit”
+* RAM [MB]: 512
+* User memory [MB]: 4 GB
+* Interface oboard: 1x RS232/422/485 / 1x USB-A / 1x RJ45 (Ethernet)
+* Software: WEC7 / Movicon CE Standard
+504.00 EUR 5,040.00
+Commodity Code 85371091990
+Order: 269167 - 160 Date: 09.07.2026
+Country of Origin IT
+PO Number: PO/V/714 Date: 09.07.2026
+470 100-221-375 314-2AG23 - VIPA CPU 314SB DPM 2 EA
+CPU 314SB_DPM - SPEED7 Technology
+DC 24V, 512kB work memory
+Memory extension (max 1MB)
+MPI, MMC slot, real-time clock
+Interface: PROFIBUS DP master, 12Mbit/s, up to 124 slaves/PtP RS485, potential
+separated, ASCII, STX/ETX, 3964R, Modbus master, USS
+master, EthernetinterfaceforPG/OPcommunication
+460.00 EUR 920.00
+Commodity Code 85371091990
+Order: 265968 - 120 Date: 22.05.2026
+Country of Origin CZ
+PO Number: PO/V/707 Date: 22.05.2026
+480 100-221-375 314-2AG23 - VIPA CPU 314SB DPM 1 EA
+CPU 314SB_DPM - SPEED7 Technology
+DC 24V, 512kB work memory
+Memory extension (max 1MB)
+MPI, MMC slot, real-time clock
+Interface: PROFIBUS DP master, 12Mbit/s, up to 124 slaves/PtP RS485, potential
+separated, ASCII, STX/ETX, 3964R, Modbus master, USS
+master, EthernetinterfaceforPG/OPcommunication
+460.00 EUR 460.00
+Commodity Code 85371091990
+Order: 266859 - 220 Date: 05.06.2026
+Country of Origin cz
+PO Number: PO/V/709 Date: 02.06.2026
+490 100-221-375 314-2AG23 - VIPA CPU 314SB DPM 3 EA
+CPU 314SB_DPM - SPEED7 Technology
+DC 24V, 512kB work memory
+Memory extension (max 1MB)
+MPI, MMC slot, real-time clock
+Interface: PROFIBUS DP master, 12Mbit/s, up to 124 slaves/PtP RS485, potential
+
+=== PAGE 15 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+Item Material _ Description | | / Quant. —_- Unit
+separated, ASCII, STX/ETX, 3964R, Modbus master, USS
+master, EthernetinterfaceforPG/OPcomeynigaoR 1,380.00
+Commodity Code 85371091990
+Order: 267802 - 130 Date: 18.06.2026
+Country of Origin CZ
+PO Number: PO/V/713 Date: 18.06.2026
+500 10105571 053-1PNO01 - IM 053PN - PROFINET-IO slave 30 EA
+IM 053PN - PROFINET-IRT-Slave
+PROFINET-IRT slave
+(Isochronous Real Time communication)
+Transfer rate 100Mbit/s
+up to 64 peripheral modules
+105.42 EUR 3,162.60
+Commodity Code 85176200000
+Order: 265968 - 100 Date: 22.05.2026
+Country of Origin TH
+PO Number: PO/V/707 Date: 22.05.2026
+510 10105571 053-1PN01 - IM 053PN - PROFINET-IO slave 10 EA
+IM 053PN - PROFINET-IRT-Slave
+PROFINET-IRT slave
+(lsochronous Real Time communication)
+Transfer rate 100Mbit/s
+up to 64 peripheral modules
+105.42 EUR 1,054.20
+Commodity Code 85176200000
+Order: 266859 - 200 Date: 05.06.2026
+Country of Origin TH
+PO Number: PO/V/709 Date: 02.06.2026
+520 10105571 053-1PN01 - IM 053PN - PROFINET-IO slave 20 EA
+IM 053PN - PROFINET-IRT-Slave
+PROFINET-IRT slave
+(Isochronous Real Time communication)
+Transfer rate 100Mbit/s
+up to 64 peripheral modules
+105.42 EUR 2,108.40
+Commodity Code 85176200000
+Order: 267802 - 110 Date: 18.06.2026
+Country of Origin TH
+PO Number: PO/V/713 Date: 18.06.2026
+
+=== PAGE 16 ===
+Document 980011869
+Date 27-Jul-26
+Currency EUR
+item Material — Description — ] ee ah Quant. = Unit
+530 10105571 053-1PN01 - IM 053PN - PROFINET-IO slave 30 EA
+IM 053PN - PROFINET-IRT-Slave
+PROFINET-IRT slave
+(lsochronous Real Time communication)
+Transfer rate 100Mbit/s
+up to 64 peripheral modules
+105.42 EUR 3,162.60
+Commodity Code 85176200000
+Order: 267391 - 270 Date: 15.06.2026
+Country of Origin TH
+Customer Material: 053-1PNO1
+PO Number: PO/V/710 Date: 10.06.2026
+Total: 81,001.89
+Rate Base Value
+VAT 0.00 % 81,001.89 0.00
+Total amount: 81,001.89
+taxfree export delivery
+eR
+YASKAWA Eurofe/GmbH YASHAWA Europe G i
+Value for customs purposes only y; / |
+Exchange rate EUR to : 0.00000 = 0.00 Lita ae - a
