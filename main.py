@@ -323,6 +323,7 @@ class InvoiceParser:
         self.is_scanned = False
         self.header = {}
         self.lines = []
+        self.invoices = {}
 
     def parse(self) -> dict:
         logger.info(f"Parsing Commercial Invoice: {self.pdf_path.name}")
@@ -345,7 +346,8 @@ class InvoiceParser:
         return {
             "header": self.header,
             "lines": self.lines,
-            "is_scanned": self.is_scanned
+            "is_scanned": self.is_scanned,
+            "invoices": getattr(self, "invoices", {self.header.get("invoice_no"): self.header})
         }
 
     def _run_ocr(self, doc) -> str:
@@ -391,24 +393,28 @@ class InvoiceParser:
 
     def _parse_invoice_text(self, text: str):
         # Header fields
-        m_inv = re.search(r"Invoice\s*No\.?\s*(\d{7,10})", text, re.IGNORECASE)
-        self.header["invoice_no"] = m_inv.group(1) if m_inv else "980012194"
+        m_inv = re.search(r"(?:Invoice\s*(?:No|Number|\#)?|Rechnung\s*(?:Nr)?)[.:\s]*(\d{7,10})", text, re.IGNORECASE)
+        m_fn = re.search(r"(\d{7,10})", self.pdf_path.name) if self.pdf_path else None
+        default_inv_no = m_inv.group(1) if m_inv else (m_fn.group(1) if m_fn else "980012194")
+        self.header["invoice_no"] = default_inv_no
 
         m_date = re.search(r"Date\s*(\d{2}[\./-]\d{2}[\./-]\d{4}|\d{2}-[A-Za-z]{3}-\d{2,4})", text)
         if m_date:
             d_str = m_date.group(1)
             try:
                 if "." in d_str:
-                    self.header["invoice_date"] = datetime.strptime(d_str, "%d.%m.%Y").date()
+                    default_inv_date = datetime.strptime(d_str, "%d.%m.%Y").date()
                 else:
-                    self.header["invoice_date"] = datetime.strptime(d_str, "%d-%b-%y").date()
+                    default_inv_date = datetime.strptime(d_str, "%d-%b-%y").date()
             except Exception:
-                self.header["invoice_date"] = date(2026, 10, 2)
+                default_inv_date = date(2026, 10, 2)
         else:
-            self.header["invoice_date"] = date(2026, 10, 2)
+            default_inv_date = date(2026, 10, 2)
 
+        self.header["invoice_date"] = default_inv_date
         self.header["currency"] = "EUR"
         self.header["supplier_name"] = "YASKAWA Europe GmbH"
+        self.invoices = {}
 
         # Stream all body lines excluding page headers
         full_body_lines = []
@@ -427,12 +433,26 @@ class InvoiceParser:
                     full_body_lines.append(s)
 
         # Parse items from stream
+        active_inv_no = default_inv_no
+        active_inv_date = default_inv_date
         active_po = "PO/V/712"
         active_po_date = date(2026, 6, 10)
 
         i = 0
         while i < len(full_body_lines):
             line = full_body_lines[i]
+
+            # Track invoice transitions across stream
+            m_inv_line = re.search(r"(?:Invoice\s*(?:No|Number|\#)?|Rechnung\s*(?:Nr)?)[.:\s]*(\d{7,10})", line, re.IGNORECASE)
+            if m_inv_line:
+                active_inv_no = m_inv_line.group(1).strip()
+            m_inv_dt = re.search(r"Date:?\s*(\d{2}[\./-]\d{2}[\./-]\d{4}|\d{2}-[A-Za-z]{3}-\d{2,4})", line)
+            if m_inv_dt and m_inv_line:
+                try:
+                    d_s = m_inv_dt.group(1)
+                    active_inv_date = datetime.strptime(d_s, "%d.%m.%Y").date() if "." in d_s else datetime.strptime(d_s, "%d-%b-%y").date()
+                except Exception:
+                    pass
 
             # Track PO transitions
             m_po = re.search(r"PO\s*Number:?\s*([A-Za-z0-9/]+)", line)
@@ -513,6 +533,8 @@ class InvoiceParser:
                     "po_no": po_num,
                     "po_date": po_d,
                     "ocr_flag": self.is_scanned,
+                    "invoice_no": active_inv_no,
+                    "invoice_date": active_inv_date
                 })
             i += 1
 
@@ -521,7 +543,24 @@ class InvoiceParser:
         if m_tot:
             self.header["total_eur"] = to_decimal(m_tot.group(1))
         else:
-            self.header["total_eur"] = Decimal("75458.98")
+            self.header["total_eur"] = sum((l["total_eur"] or Decimal("0.00")) for l in self.lines) or Decimal("75458.98")
+
+        # Collect distinct invoice headers
+        self.invoices = {}
+        for l in self.lines:
+            inv_k = str(l["invoice_no"]).strip()
+            if inv_k not in self.invoices:
+                self.invoices[inv_k] = {
+                    "invoice_no": inv_k,
+                    "invoice_date": l["invoice_date"],
+                    "currency": "EUR",
+                    "supplier_name": "YASKAWA Europe GmbH",
+                    "total_eur": Decimal("0.00")
+                }
+            self.invoices[inv_k]["total_eur"] += (l["total_eur"] or Decimal("0.00"))
+
+        if not self.invoices:
+            self.invoices[self.header["invoice_no"]] = self.header
 
 
 # ==============================================================================
@@ -852,6 +891,8 @@ class AccountingEngine:
             qty = inv_line["qty"]
             price_eur = inv_line["unit_price_eur"] or Decimal("0.00")
             line_val_eur = inv_line["total_eur"] or (price_eur * qty)
+            inv_no = str(inv_line.get("invoice_no") or self.invoice.get("header", {}).get("invoice_no", "")).strip()
+            inv_date = inv_line.get("invoice_date") or self.invoice.get("header", {}).get("invoice_date")
 
             # Currency conversion
             line_val_inr = round_cur(line_val_eur * self.exchange_rate)
@@ -915,7 +956,9 @@ class AccountingEngine:
                     "unit_sws": sws_tot,
                     "po_no": inv_line.get("po_no", ""),
                     "po_date": inv_line.get("po_date", ""),
-                    "ocr_flag": inv_line.get("ocr_flag", False)
+                    "ocr_flag": inv_line.get("ocr_flag", False),
+                    "invoice_no": inv_no,
+                    "invoice_date": inv_date
                 })
             else:
                 # Batch No: expand into Q individual unit rows with quantity 1
@@ -962,7 +1005,9 @@ class AccountingEngine:
                         "unit_sws": u_sws,
                         "po_no": inv_line.get("po_no", ""),
                         "po_date": inv_line.get("po_date", ""),
-                        "ocr_flag": inv_line.get("ocr_flag", False)
+                        "ocr_flag": inv_line.get("ocr_flag", False),
+                        "invoice_no": inv_no,
+                        "invoice_date": inv_date
                     })
 
         logger.info(f"Expansion complete: {len(self.processed_items)} output item rows generated.")
@@ -982,7 +1027,7 @@ class ExcelGenerator:
         self.yellow_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
         self.audit_records = []
 
-    def generate(self, boe_header: dict, inv_header: dict, items: list) -> Path:
+    def generate(self, boe_header: dict, inv_header: dict, items: list, inv_headers: dict | None = None) -> Path:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         out_path = self.output_dir / self.output_filename
         review_path = self.output_dir / self.output_filename.replace(".xlsx", "_REVIEW.xlsx")
@@ -990,19 +1035,22 @@ class ExcelGenerator:
         logger.info(f"Loading Base Excel template: {self.base_excel_path}")
         wb = openpyxl.load_workbook(self.base_excel_path)
 
-        # 1. Prepare Purchase Voucher Sheet
-        # The sheet name should be the Supplier Invoice Number
-        inv_no = str(inv_header["invoice_no"])
-        template_sheet_name = None
+        # 1. Identify a purchase template worksheet to clone
+        template_sheet = None
         for sname in wb.sheetnames:
-            if "custom duty" not in sname.lower() and (sname.isdigit() or "purchase" in sname.lower()):
-                template_sheet_name = sname
+            if "custom" not in sname.lower() and "duty" not in sname.lower() and (sname.isdigit() or "purchase" in sname.lower()):
+                template_sheet = wb[sname]
                 break
+        if not template_sheet:
+            for sname in wb.sheetnames:
+                if "custom" not in sname.lower() and "duty" not in sname.lower():
+                    template_sheet = wb[sname]
+                    break
+        if not template_sheet:
+            template_sheet = wb.sheetnames[0]
 
-        if not template_sheet_name:
-            template_sheet_name = wb.sheetnames[0]
-
-        ws_purch = wb[template_sheet_name]
+        # Rename template worksheet temporarily to prevent name collision with invoice sheets
+        template_sheet.title = "__TEMPLATE_PURCH__"
 
         # 2. Prepare Custom Duty Sheet
         custom_duty_sheet_name = "Custom Duty 1 "
@@ -1016,15 +1064,58 @@ class ExcelGenerator:
                         break
         ws_duty = wb[custom_duty_sheet_name]
 
-        # Remove any other older sheets from template copy to keep output pristine
+        # 3. Identify all unique supplier invoice numbers from items
+        unique_inv_nos = []
+        for it in items:
+            in_no = str(it.get("invoice_no") or inv_header.get("invoice_no", "")).strip()
+            if in_no and in_no not in unique_inv_nos:
+                unique_inv_nos.append(in_no)
+
+        if not unique_inv_nos:
+            unique_inv_nos = [str(inv_header.get("invoice_no", "PURCHASE")).strip()]
+
+        generated_purch_sheets = []
+        for inv_no in unique_inv_nos:
+            # Filter items belonging specifically to this supplier invoice
+            this_inv_items = [
+                it for it in items
+                if str(it.get("invoice_no") or inv_header.get("invoice_no", "")).strip() == inv_no
+            ]
+            if not this_inv_items:
+                continue
+
+            # Resolve header metadata for this invoice
+            if inv_headers and inv_no in inv_headers:
+                this_inv_h = dict(inv_headers[inv_no])
+            else:
+                this_inv_h = dict(inv_header)
+                this_inv_h["invoice_no"] = inv_no
+                if this_inv_items[0].get("invoice_date"):
+                    this_inv_h["invoice_date"] = this_inv_items[0]["invoice_date"]
+
+            if len(unique_inv_nos) > 1 or "total_eur" not in this_inv_h or not this_inv_h.get("total_eur"):
+                exch = boe_header.get("exchange_rate") or Decimal("1.00")
+                tot_inr = sum(it.get("total_inr", Decimal("0.00")) for it in this_inv_items)
+                this_inv_h["total_eur"] = round_cur(tot_inr / exch) if exch else Decimal("0.00")
+
+            # Clone clean purchase worksheet from template
+            ws_purch = wb.copy_worksheet(template_sheet)
+            safe_title = re.sub(r'[\/\\\?\*\[\]:]', '-', inv_no)[:31].strip()
+            ws_purch.title = safe_title
+
+            self._populate_purchase_sheet(ws_purch, boe_header, this_inv_h, this_inv_items)
+            generated_purch_sheets.append(safe_title)
+
+        # Delete temporary template sheet and any older unused sheets from base
         for sname in list(wb.sheetnames):
-            if sname not in [template_sheet_name, custom_duty_sheet_name]:
+            if sname not in generated_purch_sheets and sname != custom_duty_sheet_name:
                 del wb[sname]
 
-        ws_purch.title = inv_no
-
-        # 3. Populate Purchase Sheet
-        self._populate_purchase_sheet(ws_purch, boe_header, inv_header, items)
+        # Maintain exact sheet ordering: all purchase sheets first, then Custom Duty
+        desired_order = [s for s in generated_purch_sheets if s in wb.sheetnames]
+        if custom_duty_sheet_name in wb.sheetnames:
+            desired_order.append(custom_duty_sheet_name)
+        wb._sheets = [wb[s] for s in desired_order]
 
         # 4. Populate Customs Duty Sheet
         self._populate_duty_sheet(ws_duty, boe_header, inv_header, items)
@@ -1059,7 +1150,14 @@ class ExcelGenerator:
         narration = f"Being Euro {eur_str}/- @{rate_str}/- BoE No: {boe_no} dated :{boe_dt}"
 
         inv_no_val = int(inv_h["invoice_no"]) if str(inv_h["invoice_no"]).isdigit() else inv_h["invoice_no"]
-        inv_date = inv_h["invoice_date"]
+        inv_date = inv_h.get("invoice_date")
+        if isinstance(inv_date, str):
+            try:
+                inv_date = datetime.strptime(inv_date, "%d.%m.%Y").date() if "." in inv_date else datetime.strptime(inv_date, "%d-%b-%y").date()
+            except Exception:
+                inv_date = date.today()
+        elif not inv_date:
+            inv_date = date.today()
         entry_date = date(inv_date.year, inv_date.month, 15)  # Entry date convention
 
         # Clear existing data rows (keep row 1 header)
@@ -1076,22 +1174,35 @@ class ExcelGenerator:
 
         for idx, it in enumerate(items):
             r = idx + 2
-            ws.cell(r, 1, entry_date).number_format = "d\\-mmm\\-yy"
+            row_inv_date = it.get("invoice_date") or inv_date
+            if isinstance(row_inv_date, str):
+                try:
+                    row_inv_date = datetime.strptime(row_inv_date, "%d.%m.%Y").date() if "." in row_inv_date else datetime.strptime(row_inv_date, "%d-%b-%y").date()
+                except Exception:
+                    row_inv_date = inv_date
+            row_entry_date = date(row_inv_date.year, row_inv_date.month, 15) if hasattr(row_inv_date, "year") else entry_date
+            row_inv_no = int(it["invoice_no"]) if str(it.get("invoice_no", "")).isdigit() else (it.get("invoice_no") or inv_no_val)
+
+            ws.cell(r, 1, row_entry_date).number_format = "d\\-mmm\\-yy"
             ws.cell(r, 2, "EXCISE PURCHASE")
             ws.cell(r, 3, "Purchase-Imports")
             ws.cell(r, 4, "YASKAWA Europe GmbH")
-            ws.cell(r, 5, inv_no_val)
-            ws.cell(r, 6, inv_date).number_format = "d\\-mmm\\-yy"
+            ws.cell(r, 5, row_inv_no)
+            ws.cell(r, 6, row_inv_date).number_format = "d\\-mmm\\-yy"
             ws.cell(r, 7, "Main Location")
             ws.cell(r, 8, it["tally_name"])
             ws.cell(r, 9, it["qty"])
-            ws.cell(r, 10, inv_date).number_format = "d\\-mmm\\-yy"
+            ws.cell(r, 10, row_inv_date).number_format = "d\\-mmm\\-yy"
             ws.cell(r, 11, it["batch_no"])
             ws.cell(r, 12, float(it["unit_price_inr"])).number_format = "0.00"
             ws.cell(r, 13, float(it["total_inr"])).number_format = "0.00"
             ws.cell(r, 14, narration)
-            ws.cell(r, 15, it["po_no"])
-            ws.cell(r, 16, it["po_date"]).number_format = "d\\-mmm\\-yy"
+            ws.cell(r, 15, it.get("po_no", ""))
+            po_d = it.get("po_date")
+            if po_d:
+                ws.cell(r, 16, po_d).number_format = "d\\-mmm\\-yy"
+            else:
+                ws.cell(r, 16, "")
 
             for c in range(1, 17):
                 cell = ws.cell(r, c)
@@ -1134,11 +1245,16 @@ class ExcelGenerator:
 
         boe_no = boe_h["be_no"]
         boe_dt = boe_h["be_date"]
-        inv_no = inv_h["invoice_no"]
-        inv_date = inv_h["invoice_date"]
-        dt_str = inv_date.strftime("%d.%m.%Y")
-        narration = f"Being duty payment allocated to Yaskawa Europe GmbH consignment agains the BoE No: {boe_no} Dt.{boe_dt} Invoice No. {inv_no} DT.{dt_str}"
-        entry_date = date(inv_date.year, inv_date.month, 15)
+        inv_no = inv_h.get("invoice_no", "")
+        inv_date = inv_h.get("invoice_date")
+        if isinstance(inv_date, str):
+            try:
+                inv_date = datetime.strptime(inv_date, "%d.%m.%Y").date() if "." in inv_date else datetime.strptime(inv_date, "%d-%b-%y").date()
+            except Exception:
+                inv_date = date.today()
+        elif not inv_date:
+            inv_date = date.today()
+        default_entry_date = date(inv_date.year, inv_date.month, 15)
 
         thin_border = Border(
             left=Side(style="thin"), right=Side(style="thin"),
@@ -1149,6 +1265,17 @@ class ExcelGenerator:
         # Block 1: BCD Rows (1 row per item)
         curr_r = 2
         for it in items:
+            row_inv_no = str(it.get("invoice_no") or inv_no).strip()
+            row_inv_date = it.get("invoice_date") or inv_date
+            if isinstance(row_inv_date, str):
+                try:
+                    row_inv_date = datetime.strptime(row_inv_date, "%d.%m.%Y").date() if "." in row_inv_date else datetime.strptime(row_inv_date, "%d-%b-%y").date()
+                except Exception:
+                    row_inv_date = inv_date
+            row_dt_str = row_inv_date.strftime("%d.%m.%Y") if hasattr(row_inv_date, "strftime") else str(row_inv_date)
+            narration = f"Being duty payment allocated to Yaskawa Europe GmbH consignment agains the BoE No: {boe_no} Dt.{boe_dt} Invoice No. {row_inv_no} DT.{row_dt_str}"
+            entry_date = date(row_inv_date.year, row_inv_date.month, 15) if hasattr(row_inv_date, "year") else default_entry_date
+
             bcd_dr = f"Basic Customs Duty @ {float(it['bcd_rate']):g}%"
             ws.cell(curr_r, 1, entry_date).number_format = "d\\-mmm\\-yy"
             ws.cell(curr_r, 2, "702")
@@ -1158,7 +1285,7 @@ class ExcelGenerator:
             ws.cell(curr_r, 6, "Main Location")
             ws.cell(curr_r, 7, it["tally_name"])
             ws.cell(curr_r, 8, it["batch_no"])
-            ws.cell(curr_r, 9, inv_date).number_format = "d\\-mmm\\-yy"
+            ws.cell(curr_r, 9, row_inv_date).number_format = "d\\-mmm\\-yy"
             ws.cell(curr_r, 10, float(it["unit_bcd"])).number_format = "0.00"
             ws.cell(curr_r, 11, float(it["unit_bcd"])).number_format = "0.00"
             ws.cell(curr_r, 12, narration)
@@ -1171,6 +1298,17 @@ class ExcelGenerator:
 
         # Block 2: SWS Rows (1 row per item)
         for it in items:
+            row_inv_no = str(it.get("invoice_no") or inv_no).strip()
+            row_inv_date = it.get("invoice_date") or inv_date
+            if isinstance(row_inv_date, str):
+                try:
+                    row_inv_date = datetime.strptime(row_inv_date, "%d.%m.%Y").date() if "." in row_inv_date else datetime.strptime(row_inv_date, "%d-%b-%y").date()
+                except Exception:
+                    row_inv_date = inv_date
+            row_dt_str = row_inv_date.strftime("%d.%m.%Y") if hasattr(row_inv_date, "strftime") else str(row_inv_date)
+            narration = f"Being duty payment allocated to Yaskawa Europe GmbH consignment agains the BoE No: {boe_no} Dt.{boe_dt} Invoice No. {row_inv_no} DT.{row_dt_str}"
+            entry_date = date(row_inv_date.year, row_inv_date.month, 15) if hasattr(row_inv_date, "year") else default_entry_date
+
             ws.cell(curr_r, 1, entry_date).number_format = "d\\-mmm\\-yy"
             ws.cell(curr_r, 2, "702")
             ws.cell(curr_r, 3, "Journal")
@@ -1179,7 +1317,7 @@ class ExcelGenerator:
             ws.cell(curr_r, 6, "Main Location")
             ws.cell(curr_r, 7, it["tally_name"])
             ws.cell(curr_r, 8, it["batch_no"])
-            ws.cell(curr_r, 9, inv_date).number_format = "d\\-mmm\\-yy"
+            ws.cell(curr_r, 9, row_inv_date).number_format = "d\\-mmm\\-yy"
             ws.cell(curr_r, 10, float(it["unit_sws"])).number_format = "0.00"
             ws.cell(curr_r, 11, float(it["unit_sws"])).number_format = "0.00"
             ws.cell(curr_r, 12, narration)
@@ -1594,7 +1732,8 @@ def run_pipeline(
 
     # 6. Excel Generation
     generator = ExcelGenerator(base_path, out_dir, output_filename)
-    out_file = generator.generate(boe_data["header"], inv_data["header"], items)
+    inv_headers = inv_data.get("invoices")
+    out_file = generator.generate(boe_data["header"], inv_data["header"], items, inv_headers=inv_headers)
 
     # 7. Print Console Reconciliation Summary
     checks = generator._perform_checks(boe_data["header"], inv_data["header"], items)

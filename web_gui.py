@@ -856,7 +856,8 @@ class AutomationHttpServer(BaseHTTPRequestHandler):
             target = qs.get("type", ["output"])[0]
             dir_to_open = (WORKSPACE_ROOT / INPUT_FOLDER) if target == "input" else (WORKSPACE_ROOT / OUTPUT_FOLDER)
             try:
-                os.startfile(str(dir_to_open))
+                if hasattr(os, "startfile"):
+                    os.startfile(str(dir_to_open))
                 self.send_response(200)
                 self.end_headers()
                 self.wfile.write(b"OK")
@@ -870,7 +871,8 @@ class AutomationHttpServer(BaseHTTPRequestHandler):
             target = qs.get("file", ["master"])[0]
             file_to_open = (WORKSPACE_ROOT / INPUT_FOLDER / MASTER_EXCEL) if target == "master" else (WORKSPACE_ROOT / OUTPUT_FOLDER / OUTPUT_FILENAME)
             try:
-                os.startfile(str(file_to_open))
+                if hasattr(os, "startfile"):
+                    os.startfile(str(file_to_open))
                 self.send_response(200)
                 self.end_headers()
                 self.wfile.write(b"OK")

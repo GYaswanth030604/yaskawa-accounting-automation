@@ -1,9 +1,10 @@
 services:
   - type: web
-    name: yaskawa-import-accounting
-    runtime: python
-    buildCommand: "apt-get update && apt-get install -y tesseract-ocr && pip install -r requirements.txt"
-    startCommand: "python web_gui.py"
+    name: yaskawa-accounting-automation
+    env: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: PORT
         value: 10000

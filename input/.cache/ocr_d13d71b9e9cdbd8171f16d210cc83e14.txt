@@ -1,0 +1,118 @@
+=== PAGE 1 ===
+YASKAWA Europe GmbH, Philipp-Reis-StraBe 6,
+S576 Haters Customs Invoice
+VIPA Automation India Pvt Ltd.
+3rd Floor,k B.R. House, Invoice No. 980011770
+Hennur Main Road Date 08.07.2026
+“—e
+INDIA PO Number see item details
+Customer Number 3028799
+Our VAT Id DE128960627
+Sales Assistant Katja Fontaine
+Telephone Number +49 (0) 6196 569 489
+P yeu.ka.
+E-Mall customercare @yaskawa.eu
+Currency EUR
+Conditions
+Terms of delivery CIP Bangalore
+Item Material Description Quant. Unit
+With delivery 80292498 from 24.06.2026
+10 10110622 001-1BA20 CM 001 - Pot. distributor 10 EA
+10.34 EUR 103.40)
+Commodity Code 85369010000
+Country of Origin TH
+20 100-220-986 007-1AB00 - PM 007 - Power module 20 EA
+16.50 EUR 330.00
+Commodity Code 85369010000
+Country of Origin TH
+30 100-221-369 014-CEFOR01 - CPU 014 10 EA
+CPU 014 - SPEED7 Technology
+
+=== PAGE 2 ===
+Document 980011770
+Date 08-Jul-26
+Currency EUR
+Item Material Description Quant. —_— Unit
+235.00 EUR 2,349.98)
+Commodity Code 85371091990
+Country of Origin DE
+40 100-221-370 015-CEFPR01 - CPU 015PN 20 EA
+CPU 015PN - SPEED7 Technology
+325.00 EUR 6,500.02
+Commodity Code 85371091990
+Country of Origin DE
+50 100-220-800 021-1BF00 - SM 021 - Digital input 200 EA
+23.00 EUR 4,600.02
+Commodity Code 85389099990
+Country of Origin TH
+60 100-220-845 022-1BFO00 - SM 022 - Digital output 200 EA
+
+=== PAGE 3 ===
+Document 980011770
+Date 08-Jul-26
+Currency EUR
+Item Material Description Quant. Unit
+25.00 EUR 5,000.02
+Commodity Code 85389099990
+Country of Origin TH
+70 100-220-609 031-1BB90 - SM 031 - Analog input 2 EA
+85.00 EUR 170.00
+Commodity Code 85389099990
+Country of Origin TH
+80 100-220-616 031-1BD30 - SM 031 - Analog input 5 EA
+73.00 EUR 365.00
+Commodity Code 85389099990
+Country of Origin TH
+90 100-220-615 031-1BD40 - SM 031 - Analog input 10 EA
+73.00 EUR 730.00
+Commodity Code 85389099990
+Country of Origin TH
+100 100-220-578 050-1BA00 - FM 050 - Counter module 4 EA
+90.00 EUR 360.00
+Commodity Code 85389099990
+
+=== PAGE 4 ===
+Document 980011//0
+Date 08-Jul-26
+Currency EUR
+Item Material Description Quant. Unit
+Country of Origin TH
+110 100-221-378 314-6CG23 - VIPA CPU 314SC DPM 1 EA
+519.12 EUR 519.12
+Commodity Code 85371091990
+Country of Origin CZ
+120 10091642 SW110T1MA - OPC Server S7 TCP/IP License 1 EA
+191.00 EUR 191.00
+Commodity Code 49119900000
+Country of Origin DE
+130 10099383 H41-71A41-0 - smartPanel TP304-SM 3 EA
+195.00 EUR 585.00
+Commodity Code 85371091990
+Country of Origin IT
+
+=== PAGE 5 ===
+Document 980011//0
+Date 08-Jul-26
+Currency EUR
+item Material Description Quant. Unit
+140 10099384 H71-71A41-0 - smartPanel TP307-SM 5 EA
+294.00 EUR 1,470.02
+Commodity Code 85371091990
+Country of Origin IT
+150 100-221-370 015-CEFPRO1 - CPU 015PN 1 EA
+CPU 015PN - SPEED7 Technology
+325.00 EUR 325.00
+Commodity Code 85371091990
+Country of Origin DE
+Total: 23,598.58
+Rate Base Value
+VAT 0.00 % 23,598.58 0.00
+Total amount: 23,598.58
+
+=== PAGE 6 ===
+Document yoUUli si
+Date 08-Jul-26
+Currency EUR
+— a GmbH | YASKAWA Europe Gethit }
+| / LA |
+~ Authorized Siang | Aurnerized Signature - |
